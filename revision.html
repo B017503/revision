@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 1 — IT Systems Revision</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c23;
+    --border: #252a35;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --card-glow: rgba(0,229,255,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #131825 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.3px;
+  }
+  .header-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .progress-bar-wrap { flex: 1; max-width: 300px; margin: 0 24px; }
+  .progress-label { font-size: 11px; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width 0.4s ease; }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 24px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    background: var(--surface);
+  }
+  .nav-tab {
+    padding: 9px 18px;
+    border-radius: 8px 8px 0 0;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-tab:hover { color: var(--text); background: var(--surface2); }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface2); }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+
+  /* SECTION VIEW */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* TOPIC CARDS GRID */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.22s;
+    position: relative;
+    overflow: hidden;
+  }
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .topic-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 32px var(--card-glow); }
+  .topic-card:hover::before { opacity: 1; }
+  .topic-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .topic-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+  .topic-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pill {
+    padding: 3px 9px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(124,58,237,0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(124,58,237,0.2);
+  }
+  .topic-mastery { margin-top: 12px; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .topic-mastery-fill { height: 100%; border-radius: 99px; transition: width 0.5s; }
+
+  /* TOPIC DETAIL */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-size: 13px; padding: 8px 14px;
+    border-radius: 8px; cursor: pointer; margin-bottom: 22px;
+    transition: border-color 0.2s;
+  }
+  .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .topic-header {
+    margin-bottom: 24px;
+  }
+  .topic-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .topic-header .session-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 12px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .content-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .content-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .content-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--warn);
+    margin: 14px 0 7px;
+  }
+  .content-section p { color: #bfc6d4; margin-bottom: 10px; }
+  .content-section ul { padding-left: 18px; }
+  .content-section li { color: #bfc6d4; margin-bottom: 5px; }
+  .content-section li strong { color: var(--text); }
+
+  .key-term {
+    display: inline-block;
+    background: rgba(16,185,129,0.12);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: #34d399;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .data-table th {
+    background: rgba(0,229,255,0.08);
+    color: var(--accent);
+    text-align: left;
+    padding: 9px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: #bfc6d4; font-size: 13px; vertical-align: top; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+
+  /* QUIZ VIEW */
+  .quiz-header { margin-bottom: 24px; text-align: center; }
+  .quiz-header h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .quiz-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .quiz-counter { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .quiz-topic-tag { font-size: 11px; color: var(--accent2); background: rgba(124,58,237,0.12); padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(124,58,237,0.2); }
+
+  .quiz-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 22px;
+    line-height: 1.4;
+  }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-option {
+    padding: 14px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface2);
+    text-align: left;
+  }
+  .quiz-option:hover:not(.selected):not(.disabled) { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.04); }
+  .quiz-option.correct { border-color: var(--accent3); background: rgba(16,185,129,0.12); color: #34d399; }
+  .quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.1); color: #fca5a5; }
+  .quiz-option.disabled { cursor: default; }
+  .quiz-option.reveal-correct { border-color: var(--accent3); background: rgba(16,185,129,0.08); color: #34d399; }
+
+  .quiz-feedback {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: none;
+  }
+  .quiz-feedback.correct { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: #6ee7b7; }
+  .quiz-feedback.wrong { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; }
+  .quiz-feedback .explain { color: #bfc6d4; margin-top: 8px; font-size: 13px; }
+  .quiz-feedback .learn-link { color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 13px; }
+
+  .quiz-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 9px;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: var(--danger); color: #fff; }
+
+  /* QUIZ SELECTOR */
+  .quiz-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .quiz-sel-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .quiz-sel-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .quiz-sel-card.active-sel { border-color: var(--accent); background: rgba(0,229,255,0.06); }
+  .quiz-sel-card .qs-icon { font-size: 28px; margin-bottom: 8px; }
+  .quiz-sel-card .qs-label { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+  .quiz-sel-card .qs-count { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* RESULTS */
+  .results-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .results-score { font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800; }
+  .results-score.great { color: var(--accent3); }
+  .results-score.ok { color: var(--warn); }
+  .results-score.poor { color: var(--danger); }
+  .results-label { color: var(--muted); margin-bottom: 20px; }
+  .results-stats { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+  .results-stat .val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; }
+  .results-stat .lbl { font-size: 12px; color: var(--muted); }
+
+  /* EXAM MODE */
+  .exam-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .exam-banner {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: #fca5a5;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .exam-q { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .exam-q:last-child { border-bottom: none; }
+  .exam-q-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .exam-q-text { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+  .exam-q-marks { font-size: 12px; color: var(--warn); }
+  .exam-textarea {
+    width: 100%;
+    min-height: 100px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    resize: vertical;
+    margin-top: 10px;
+  }
+  .exam-textarea:focus { outline: none; border-color: var(--accent); }
+  .exam-answer-reveal {
+    margin-top: 10px;
+    padding: 14px;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 8px;
+    color: #6ee7b7;
+    font-size: 13px;
+    display: none;
+  }
+
+  /* FLASHCARDS */
+  .flashcard-wrap { max-width: 600px; margin: 0 auto; }
+  .flashcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .flashcard:hover { border-color: var(--accent); }
+  .flashcard .fc-side { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+  .flashcard .fc-text { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.35; }
+  .flashcard .fc-hint { font-size: 12px; color: var(--muted); margin-top: 16px; }
+  .flashcard.flipped { border-color: var(--accent2); background: rgba(124,58,237,0.08); }
+  .flashcard.flipped .fc-text { color: #c4b5fd; }
+  .fc-nav { display: flex; gap: 12px; justify-content: center; }
+  .fc-progress { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+
+  /* SECTION SELECTOR */
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .section-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .section-btn:hover, .section-btn.on { border-color: var(--accent); background: rgba(0,229,255,0.04); }
+  .section-btn .sb-num { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
+  .section-btn .sb-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--text); margin-top: 3px; }
+
+  /* INFO CHIP */
+  .info-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .info-chip { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+  .chip-blue { background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.2); }
+  .chip-purple { background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+  .chip-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+  .chip-yellow { background: rgba(245,158,11,0.1); color: var(--warn); border: 1px solid rgba(245,158,11,0.2); }
+
+  .tip-box {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #fde68a;
+  }
+  .tip-box strong { color: var(--warn); }
+
+  /* Timer */
+  .timer-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .timer-display.warning { color: var(--warn); }
+  .timer-display.danger { color: var(--danger); animation: pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity: 0.5; } }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header { flex-wrap: wrap; gap: 10px; }
+    .progress-bar-wrap { max-width: 100%; flex: 100%; order: 3; }
+    .main { padding: 20px 14px 60px; }
+    .quiz-card, .exam-card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">⚡ Unit 1 — IT Systems</div>
+    <div class="header-sub">BTEC National · Full Revision Tool</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-label"><span>Overall Progress</span><span id="prog-pct">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showView('notes')">📚 Notes</button>
+  <button class="nav-tab" onclick="showView('flashcards')">🃏 Flashcards</button>
+  <button class="nav-tab" onclick="showView('quiz')">🧠 Quiz</button>
+  <button class="nav-tab" onclick="showView('exam')">📝 Exam Practice</button>
+</div>
+
+<div class="main">
+
+<!-- ==================== NOTES VIEW ==================== -->
+<div class="view active" id="view-notes">
+
+  <div id="notes-home">
+    <div style="margin-bottom:20px;">
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;">All Topics</div>
+      <div style="color:var(--muted);font-size:14px;">Click any topic to read detailed notes. All 29 sessions covered.</div>
+    </div>
+    <div class="topics-grid" id="topics-grid"></div>
+  </div>
+
+  <div id="notes-detail" style="display:none;">
+    <button class="back-btn" onclick="showNotesHome()">← Back to Topics</button>
+    <div id="notes-content"></div>
+  </div>
+
+</div>
+
+<!-- ==================== FLASHCARDS VIEW ==================== -->
+<div class="view" id="view-flashcards">
+  <div style="margin-bottom:20px;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;">Flashcards</div>
+    <div style="color:var(--muted);font-size:14px;">Click card to flip. Master every key term.</div>
+  </div>
+
+  <div style="margin-bottom:16px;">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Filter by topic:</div>
+    <div id="fc-section-btns" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+  </div>
+
+  <div class="flashcard-wrap">
+    <div class="fc-progress" id="fc-progress">Card 1 of 1</div>
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="fc-side" id="fc-side">TERM</div>
+      <div class="fc-text" id="fc-text">Loading...</div>
+      <div class="fc-hint" id="fc-hint">Click to reveal definition</div>
+    </div>
+    <div class="fc-nav">
+      <button class="btn btn-secondary" onclick="prevCard()">← Prev</button>
+      <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+      <button class="btn btn-secondary" onclick="shuffleCards()">🔀 Shuffle</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== QUIZ VIEW ==================== -->
+<div class="view" id="view-quiz">
+  <div id="quiz-home">
+    <div class="quiz-header">
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;">Quiz Mode</div>
+      <div style="color:var(--muted);font-size:14px;">Test yourself — instant feedback + explanations if you get it wrong.</div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Choose topic:</div>
+      <div class="quiz-selector" id="quiz-topic-selector"></div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
+      <button class="btn btn-primary" onclick="startQuiz('all', 20)">🚀 Quick Fire (20 Qs)</button>
+      <button class="btn btn-secondary" onclick="startQuiz('all', 50)">🔥 Full Set (50 Qs)</button>
+      <button class="btn btn-secondary" onclick="startQuiz('all', 999)">💀 All Questions</button>
+    </div>
+  </div>
+
+  <div id="quiz-active" style="display:none;">
+    <div class="quiz-card">
+      <div class="quiz-meta">
+        <span class="quiz-counter" id="q-counter">Q 1 / 20</span>
+        <span class="quiz-topic-tag" id="q-topic-tag">Topic</span>
+      </div>
+      <div class="quiz-q" id="q-text">Question</div>
+      <div class="quiz-options" id="q-options"></div>
+      <div class="quiz-feedback" id="q-feedback">
+        <div id="q-feedback-text"></div>
+        <div class="explain" id="q-explain"></div>
+        <div style="margin-top:10px;"><span class="learn-link" id="q-learn-link" onclick="">📖 Go to full notes for this topic</span></div>
+      </div>
+      <div class="quiz-actions">
+        <button class="btn btn-secondary" onclick="endQuiz()">End Quiz</button>
+        <button class="btn btn-primary" id="q-next-btn" onclick="nextQuestion()" style="display:none;">Next Question →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-results" style="display:none;">
+    <div class="results-card">
+      <div style="font-size:36px;margin-bottom:8px;">🎯</div>
+      <div class="results-score" id="res-score">0%</div>
+      <div class="results-label" id="res-label">Here's how you did</div>
+      <div class="results-stats">
+        <div class="results-stat"><div class="val" id="res-correct" style="color:var(--accent3)">0</div><div class="lbl">Correct</div></div>
+        <div class="results-stat"><div class="val" id="res-wrong" style="color:var(--danger)">0</div><div class="lbl">Wrong</div></div>
+        <div class="results-stat"><div class="val" id="res-total">0</div><div class="lbl">Total</div></div>
+      </div>
+      <div id="res-weak-areas" style="margin:16px 0;text-align:left;"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="startQuiz(currentQuizTopic, currentQuizLen)">🔄 Try Again</button>
+        <button class="btn btn-secondary" onclick="showQuizHome()">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EXAM PRACTICE VIEW ==================== -->
+<div class="view" id="view-exam">
+  <div id="exam-home">
+    <div style="margin-bottom:20px;text-align:center;">
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;">Exam Practice</div>
+      <div style="color:var(--muted);font-size:14px;">Real exam-style questions. Write your answers, then reveal the mark scheme.</div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+      <button class="btn btn-primary" onclick="startExam('short')">📝 Short Answer Questions</button>
+      <button class="btn btn-secondary" onclick="startExam('long')">📄 Long Answer (Evaluate/Discuss)</button>
+      <button class="btn btn-danger" onclick="startExam('mock')">⏱️ Timed Mock Exam (30 min)</button>
+    </div>
+  </div>
+  <div id="exam-active" style="display:none;"></div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// =====================================================
+// DATA — ALL UNIT 1 CONTENT
+// =====================================================
+
+const topics = [
+  {
+    id: 1, num: "1.1", title: "Features of Digital Devices",
+    pills: ["PCs", "Servers", "IoT", "Mobile", "Sensors"],
+    sections: [
+      { heading: "Personal Computers (PCs)", content: `PCs are <strong>standalone devices</strong> including desktops, laptops and touchscreen tablets.` },
+      { heading: "Multifunctional Devices (MFDs)", content: `Also known as All-In-One (AIO) devices. Printers that also scan, photocopy, email and connect wirelessly. Also called <strong>MFDs</strong>.` },
+      { heading: "Mobile Devices", content: `Portable digital devices wirelessly connected to the internet via <strong>Wi-Fi</strong> or <strong>4G/5G</strong>. Smartphones are essential everyday items.` },
+      { heading: "Servers", body: [
+        { t: "File server", d: "Stores data/software centrally, manages shared access, authenticates users." },
+        { t: "Application server", d: "Creates web applications and server environments." },
+        { t: "Web server", d: "Accepts HTTP/HTTPS requests, hosts websites." },
+      ]},
+      { heading: "Entertainment Systems", content: `Multifunctional, connect to internet, access music/video/games. Includes games consoles, smart TVs, smart speakers. Media can be stored locally or streamed from a <strong>digital media server</strong>.` },
+      { heading: "Digital Cameras", content: `Capture still/moving images. Resolution measured in <strong>pixels</strong> — more pixels = higher resolution. Now key element of smartphones.` },
+      { heading: "Navigation Systems", content: `Use <strong>GPS</strong> or GLONASS to navigate, show traffic, accidents, weather. Can be device-based or embedded in cars/smartphones.` },
+      { heading: "Communication Devices", body: [
+        { t: "Ethernet", d: "Copper wire cables — physical connections." },
+        { t: "Satellites", d: "Two-way, cable-free data transmission via orbiting satellite." },
+        { t: "Wi-Fi (IEEE 802.11)", d: "High-frequency radio waves." },
+        { t: "Fibre optic cable", d: "Light pulses across vast distances — superfast broadband." },
+        { t: "4G/5G", d: "4G = up to 50 Mbps; 5G = 75 Mbps upwards." },
+        { t: "Bluetooth®", d: "Short-range wireless (PANs). Range ~10 metres." },
+      ]},
+      { heading: "Embedded Systems", content: `Computer systems with multiple components built in, e.g. car safety systems, washing machines, smartphones, blood glucose monitors.` },
+      { heading: "Sensors", content: `Respond to changes in the environment: movement, light, temperature, sound. Examples: security lights, doorbells, parking sensors.` },
+      { heading: "Internet of Things (IoT)", content: `Collective group of devices that connect to each other and the internet. Examples: smart speakers, home heating, games consoles.` },
+    ]
+  },
+  {
+    id: 2, num: "1.2", title: "Function and Uses of Digital Devices",
+    pills: ["Personal", "Education", "Retail", "Healthcare", "CAD/CAM"],
+    sections: [
+      { heading: "Personal Use", content: `Communicate quickly, carry out tasks. Risk: identity theft if device lost/stolen. Mental health impact from social media.` },
+      { heading: "Education and Training", content: `Remote/online learning, recorded lectures, flexible study. Many lectures now recorded for replay.` },
+      { heading: "Social", content: `Social media for arrangements, news, information. Risk of information overload and mental health impact.` },
+      { heading: "Retail", body: [
+        { t: "Scanners/Digital cash registers", d: "Read barcodes, calculate change, self-checkouts." },
+        { t: "RFID", d: "Radio Frequency Identification — automatically tracks stock from factory to store." },
+        { t: "Contactless / NFC", d: "Near Field Communication — tap to pay." },
+        { t: "EFTPOS", d: "Electronic Funds Transfer at Point of Sale — credit/debit card transactions, ATMs." },
+        { t: "Data preferences / Loyalty", d: "Cards track preferences; security systems use facial recognition." },
+      ]},
+      { heading: "Manufacturing", content: `<strong>CAD</strong> (Computer-Aided Design) creates technical drawings. <strong>CNC</strong> machines mill, turn, mould with precision. <strong>CAM</strong> (Computer-Aided Manufacturing) for mass production.` },
+      { heading: "Healthcare", content: `Remote surgery with robotic arms, micro-surgery, heart rate/blood pressure monitors, 'friendly' robots for recovery, robots disinfecting rooms. <strong>AI</strong> used for diagnostics.` },
+      { heading: "Creative Tasks", content: `Free digital images, delete easily, CGI and 3D graphics. Music, film can be replicated/edited digitally.` },
+      { heading: "Automation and Robotics", content: `Increase productivity, reduce waste, improve quality and processing speed. Used extensively in farming (e.g. Techno Farm Keihanna, vertical farming robots).` },
+    ]
+  },
+  {
+    id: 3, num: "1.3", title: "Forms of Notation to Design IT Systems",
+    pills: ["System Diagrams", "DFD", "Flowcharts"],
+    sections: [
+      { heading: "System Diagrams", content: `Show how components are connected. Can be simple (desktop + peripherals) or complex (network diagrams with firewalls, servers, switches, hubs).` },
+      { heading: "Data Flow Diagrams (DFD)", content: `Use specific shapes to plan database systems. <strong>Oval/ellipse</strong> = person/entity, <strong>Rectangle with number</strong> = process, <strong>Open rectangle (D1, D2)</strong> = database, <strong>Arrows</strong> = data flow.` },
+      { heading: "Flowcharts", content: `Show flow of information around a solution/problem. Used by software developers. Symbols: <strong>Arrow</strong> = connector, <strong>Rectangle</strong> = process, <strong>Parallelogram</strong> = input/output, <strong>Diamond</strong> = decision (Y/N).`, tip: "Many flowchart symbols are available in MS Office, Open Office, and free online tools." },
+    ]
+  },
+  {
+    id: 4, num: "1.4", title: "Peripheral Devices and Assistive Technologies",
+    pills: ["Input", "Output", "Storage", "Assistive Tech"],
+    sections: [
+      { heading: "Peripheral Devices Overview", content: `Hardware that is auxiliary (supplementary) to the computer.` },
+      { heading: "Input Devices", content: `Send information to a computer. Do NOT store data. Examples: keyboard, mouse, webcam, microphone, joystick, controller.` },
+      { heading: "Output Devices", content: `Provide information FROM the computer. Examples: printer, monitor, speaker, projector.` },
+      { heading: "Storage Devices", content: `I/O devices — can copy or transfer data to/from them. Some are read-only. Used to: save space, transfer files, share files, back up data, support communication (Wi-Fi, Bluetooth).` },
+      { heading: "Assistive Technologies", content: `Products or systems that support individuals with disabilities, restricted mobility or impairments.` },
+      { heading: "Assistive Tech Table", body: [
+        { t: "Adaptive keyboards", d: "Large keys for visually impaired; ergonomic to prevent RSI." },
+        { t: "Screen readers", d: "Reads aloud screen content. Examples: JAWS, Dolphin's Supernova." },
+        { t: "Braille displays", d: "Physical pins move to represent characters for fingers." },
+        { t: "Screen magnifiers", d: "Magnify chosen area of screen." },
+        { t: "Head pointers", d: "Operate devices hands-free for limited mobility users." },
+        { t: "Single switch entry devices", d: "Control devices using one large button/switch." },
+        { t: "Foot switches", d: "Operate by pressing with foot or walking stick; Bluetooth-enabled." },
+        { t: "Sip-and-puff switches", d: "User sips and puffs like a straw." },
+        { t: "Eye-tracking software", d: "Tracks eye movements to control screen — also available in wearables." },
+        { t: "Text-to-speech (TTS)", d: "Voice recognition software (Notevibes, Linguatec, Siri, Alexa, Cortana)." },
+      ]}
+    ]
+  },
+  {
+    id: 5, num: "1.5", title: "Storage Media and Data Processing",
+    pills: ["Magnetic", "SSD", "Optical", "Manual/Auto"],
+    sections: [
+      { heading: "Types of Storage", body: [
+        { t: "Magnetic drives (HDD)", d: "High-capacity; desktop/server hard drives. Cheaper per GB." },
+        { t: "Solid State Drives (SSD)", d: "Flash memory; laptops, tablets, USB flash drives. Much faster than magnetic." },
+        { t: "Optical discs", d: "CD-ROMs, DVDs, Blu-ray. Quick access for distribution." },
+      ]},
+      { heading: "Characteristics of Storage Media", body: [
+        { t: "Capacity", d: "Amount of data stored. Demand increasing as files get larger." },
+        { t: "Cost", d: "Described as 'cost per gigabyte'. HDDs cheaper per GB than SSDs." },
+        { t: "Speed", d: "How quickly data is written/read. SSD >> HDD >> optical." },
+        { t: "Compatibility", d: "Check compatibility including connectivity (e.g., USB type)." },
+      ]},
+      { heading: "Data Processing", content: `Digital devices run programs. Input → Process → Output. Can be manual or automatic.` },
+      { heading: "Manual vs Automatic", body: [
+        { t: "Manual", d: "Physical user interaction — e.g., updating records with keyboard, scanning barcodes, entering survey data." },
+        { t: "Automatic", d: "Background processing with little user input — e.g., smart meters, invoice generation, weather monitoring." },
+      ]}
+    ]
+  },
+  {
+    id: 6, num: "1.6", title: "Types & Roles of Operating Systems",
+    pills: ["OS Types", "OS Roles", "Utility", "Application"],
+    sections: [
+      { heading: "What is an OS?", content: `The <strong>platform</strong> that enables software to work. Acts as an <strong>interface</strong> between user, hardware and software. Operates with a GUI.` },
+      { heading: "Types of Operating System", body: [
+        { t: "Batch", d: "Organises similar jobs in batches; no direct interaction. Used for bank statements, wage slips." },
+        { t: "Distributed", d: "Processes run on multiple interconnected computers (one system). E.g. social networks, online gaming." },
+        { t: "Multitasking", d: "Runs multiple applications simultaneously — Windows, everyday use." },
+        { t: "Network OS", d: "Controls access to resources on a network. Installed on servers." },
+        { t: "Real-time OS", d: "Processes data in real time — time critical. Air traffic control, stock markets, medical scanners." },
+        { t: "Mobile OS", d: "Small file size, low memory — smartphones, smartwatches, tablets." },
+        { t: "Single-user", d: "Only one user at a time. Single-task = one function only." },
+        { t: "Multi-user", d: "Multiple users on same system simultaneously. Cloud servers allow collaborative editing." },
+      ]},
+      { heading: "Roles of the OS", body: [
+        { t: "Networking", d: "Manages remote printing, user management, backups." },
+        { t: "Security", d: "Continual security checks, gathers health data, updates against threats." },
+        { t: "Memory management", d: "Allocates available memory so important tasks get priority." },
+        { t: "Multitasking", d: "Allocates tiny amounts of processor time to each process in turn." },
+        { t: "Device drivers", d: "Uses drivers to link device with peripherals; regularly updated." },
+        { t: "User accounts", d: "Saves preferences, controls permitted tasks and resources." },
+      ]},
+      { heading: "Utility Software", content: `Performs routine maintenance tasks: security checks, virus removal, file cleanup, software updates, backups, alerts, managing peripherals. Performance affected by: amount of memory, bandwidth, conflicting software, memory failures.` },
+      { heading: "Application Software", content: `Used to carry out tasks on a computer — word processing, spreadsheets, video editing, image manipulation. Every business uses bespoke application software.` },
+      { heading: "Factors Affecting OS/Software Choice", body: [
+        { t: "Cost", d: "Licences can be expensive; organisations may share server copies." },
+        { t: "Security", d: "Risk to technology is constant; security must be considered." },
+        { t: "Hardware/software compatibility", d: "Specific hardware may only be compatible with one OS." },
+        { t: "Features", d: "Availability, support, update frequency influence decisions." },
+        { t: "Business/user needs", d: "Real-time OS for time/security-sensitive tasks; lightweight OS for better performance." },
+        { t: "Performance", d: "More tasks = more memory/processing needed. Linux is lighter, often faster." },
+      ]}
+    ]
+  },
+  {
+    id: 7, num: "1.7", title: "Computer Software in an IT System",
+    pills: ["GUI", "CLI", "Open Source", "File Types"],
+    sections: [
+      { heading: "User Interfaces", body: [
+        { t: "Command Line (CLI)", d: "Text commands only — more flexible, can run on lower spec computers but requires OS-specific knowledge." },
+        { t: "Menu-driven", d: "Requires less memory than GUI. Users choose from menus. Risk averse users prefer GUI." },
+        { t: "Graphical (GUI)", d: "Icons/images for functions. Easiest method. Touchscreen = haptic technology (tablets, smartphones, handheld consoles)." },
+      ]},
+      { heading: "Open Source vs Proprietary Software", body: [
+        { t: "Open Source", d: "Free to use, edit, give away, modify. Created by volunteers. Examples: LibreOffice, Linux." },
+        { t: "Proprietary", d: "Privately owned. Users pay for licence or subscribe. Cannot edit or share. Examples: Windows, MS Office, Adobe." },
+      ]},
+      { heading: "Open Source — Advantages", content: `Free to download, lots to try, can be changed to meet your needs.` },
+      { heading: "Open Source — Disadvantages", content: `May not be supported if something goes wrong. Help harder to find. May not work as described. May look/work differently from familiar software.` },
+      { heading: "Proprietary — Advantages", content: `Problems quickly resolved. Regularly updated. New features added. Familiar to many users.` },
+      { heading: "Proprietary — Disadvantages", content: `One-off cost or subscription. Cannot be customised or edited. Users cannot share.` },
+      { heading: "Common File Types — Images", body: [
+        { t: ".bmp (BITMAP)", d: "Microsoft; common non-compressed format." },
+        { t: ".tif (TIFF)", d: "Professional; lossless compressed." },
+        { t: ".jpg (JPEG)", d: "Widely used online; lossy compressed." },
+        { t: ".gif (GIF)", d: "Lossless; for online images and animations (simple images)." },
+        { t: ".raw (RAW)", d: "Photography professionals; maintains original quality." },
+      ]},
+      { heading: "Common File Types — Audio", body: [
+        { t: ".wav", d: "Uncompressed; for creating audio CDs." },
+        { t: ".mp3", d: "Lossy compressed; portable music devices." },
+        { t: ".aac", d: "Apple version of .mp3." },
+        { t: ".flac", d: "Lossless, open source." },
+        { t: ".alac", d: "Apple version of .flac." },
+      ]},
+      { heading: "Common File Types — Video", body: [
+        { t: ".mp4", d: "Online videos; popular lossy compressed." },
+        { t: ".avi", d: "One of first video formats; with or without compression." },
+        { t: ".mov", d: "Apple lossy compressed; largely replaced by mp4." },
+        { t: ".mkv", d: "Open source container; video + sound + text; used for streaming." },
+      ]},
+      { heading: "Common File Types — Application", body: [
+        { t: "Microsoft Office", d: ".docx (Word), .xlsx (Excel), .pptx (PowerPoint), .accdb (Access)." },
+        { t: "Open Source", d: ".odt (word), .ods (spreadsheet), .odp (presentation)." },
+        { t: "Other", d: ".pdf (portable, high quality sharing), .psd (Adobe Photoshop), .txt (basic text)." },
+      ]},
+    ]
+  },
+  {
+    id: 8, num: "1.8–1.9", title: "Choosing IT Systems",
+    pills: ["Compatibility", "Cost", "Security", "TCO"],
+    sections: [
+      { heading: "Factors Affecting Choice of IT Systems", body: [
+        { t: "User needs", d: "Different needs inform digital technology choices — processor power, software, RAM." },
+        { t: "Specifications", d: "Software designers may require specific processing power." },
+        { t: "Compatibility", d: "Devices that need to connect must interact properly." },
+        { t: "Connectivity", d: "Remote staff likely need VLAN, mobile data, stable Bluetooth/Wi-Fi." },
+        { t: "Cost (TCO)", d: "Total Cost of Ownership — includes maintenance, upgrades, not just purchase price." },
+        { t: "Efficiency", d: "Inefficient specs mean employees take longer — costs money." },
+        { t: "Implementation", d: "Timescales, testing, migration, downtime must all be planned." },
+        { t: "Productivity", d: "New systems are often implemented to increase productivity." },
+        { t: "Security", d: "Sensitive data (police, health, finance) requires strong security." },
+      ]},
+      { heading: "Features and Implications of IT Systems for Organisations", body: [
+        { t: "Stock control", d: "Barcodes auto-populate databases; RFID tracks stock factory to consumer." },
+        { t: "Data logging", d: "CCTV, weather stations, carbon monoxide sensors — records in real time." },
+        { t: "Data analysis", d: "Monitor performance, manipulate data; loyalty schemes track shopping habits." },
+        { t: "General office tasks", d: "Admin, invoices (automated), company accounts with specialist software." },
+        { t: "Creative tasks", d: "CAD for 3D imagery, QR codes for interactivity, CGI." },
+        { t: "Advertising", d: "Pop-up ads, video adverts, social media feeds. Viral marketing." },
+        { t: "Manufacturing", d: "CAM — precision components; increased accuracy and productivity." },
+        { t: "Security", d: "CCTV, burglar alarms, antivirus software." },
+      ]},
+      { heading: "Impact on Organisations", body: [
+        { t: "User experience", d: "Ease of use, performance, availability, accessibility." },
+        { t: "Employee/customer needs", d: "Immediate allocation of product/service but loss of personal interaction with chatbots." },
+        { t: "Cost", d: "Fewer workers BUT higher maintenance, upgrades, retraining." },
+        { t: "Implementation challenges", d: "Timescales, testing, migration, downtime — all cost money." },
+        { t: "Replacement/integration", d: "Contingencies needed to mitigate loss of revenue during changeover." },
+      ]},
+      { heading: "Staff Training", body: [
+        { t: "Initial training", d: "Up-front before system launch — may be less effective." },
+        { t: "Ongoing phased training", d: "Build on existing knowledge; greater user proficiency." },
+      ]}
+    ]
+  },
+  {
+    id: 9, num: "1.11", title: "Emerging Technologies",
+    pills: ["AI", "IoT", "3D Printing", "Robotics", "VOIP"],
+    sections: [
+      { heading: "Overview", content: `New technologies emerging at rapid pace: AI, driverless technology, 3D printing, robotics, virtual reality (metaverse). Computing power doubles roughly every 2 years (Moore's Law).` },
+      { heading: "Implications on IT System Performance", body: [
+        { t: "ISPs", d: "Building fibre optic networks to increase capacity and speed." },
+        { t: "VOIP", d: "Voice Over Internet Protocol — routes calls over IP rather than phone lines. Protocols: RTP, SIP." },
+        { t: "Big data", d: "Growth of data collection increases need for storage systems and data protection." },
+        { t: "Data centres", d: "Need suitable climate-controlled locations; raw materials have environmental cost." },
+        { t: "Emerging tech costs", d: "New manufacturing processes and raw materials costs." },
+      ]},
+      { heading: "Impact on Personal Use", body: [
+        { t: "World Wide Web", d: "Tim Berners-Lee, 1989. By 2024: 5 billion+ internet users." },
+        { t: "Quick decisions", d: "Pressure to make instant decisions when shopping/communicating." },
+        { t: "Early adopters", d: "Pressure on individuals to adopt new tech quickly." },
+        { t: "Work/life boundary", d: "Employers contact employees outside normal hours." },
+        { t: "Too much choice", d: "Entertainment systems can be overwhelming." },
+      ]},
+      { heading: "Organisational Impact", body: [
+        { t: "AI", d: "Analyse data, make predictions, create content." },
+        { t: "Driverless technology", d: "Improve commuting, act as mobile office." },
+        { t: "3D printing", d: "Manufacture one-off/unique products remotely." },
+        { t: "Robotics", d: "Increase manufacturing productivity." },
+      ]}
+    ]
+  },
+  {
+    id: 10, num: "1.12", title: "Transmitting Data: Connectivity",
+    pills: ["Bluetooth", "USB", "Wi-Fi", "Ethernet", "NFC"],
+    sections: [
+      { heading: "What is Connectivity?", content: `The ability to process digital data by connecting the OS with applications and systems. We expect devices to connect automatically.` },
+      { heading: "Wired and Wireless Technologies", body: [
+        { t: "Bluetooth", d: "Short-range wireless (~10m). Peripheral devices — mice, keyboards, headphones, speakers, printers." },
+        { t: "USB", d: "Wired, bidirectional bus — transmit and receive. USB-C now standard. Can provide power. Most common connection port." },
+        { t: "Wi-Fi", d: "Wireless via radio waves. IEEE 802.11 standard. Clear signal needed; affected by interference from walls, electrical devices." },
+        { t: "Ethernet", d: "Wired collection of cables. Creates LAN or WAN. Stable and quick. Used in organisations for reliability." },
+      ]},
+      { heading: "Features of Connection Types", content: `For individuals: convenience — Bluetooth and Wi-Fi ideal. For organisations: speed, reliability, stability — ethernet (hard-wired). Extremely strong passwords needed for wireless.` },
+      { heading: "Implications of Connection Type", content: `Wi-Fi = all users stay in same location. Bluetooth = limits working area. Cable-based = must be physically near and have correct ports. Ethernet cables degrade after ~100 metres.` },
+      { heading: "Impact on IT System Performance", content: `Wi-Fi can have interruptions from interference, thick walls, large objects. Ethernet cables can restrict mobility and cause trip hazards. USB and Bluetooth work over shorter distances.` },
+    ]
+  },
+  {
+    id: 11, num: "1.13", title: "Transmitting Data: Networks",
+    pills: ["Star", "Ring", "Bus", "LAN", "WAN", "VPN"],
+    sections: [
+      { heading: "Network Topologies", content: `A topology describes how digital components are connected.` },
+      { heading: "Topology Types", body: [
+        { t: "Star", d: "Most common. All devices connect to a central hub/router. One device failure doesn't affect others." },
+        { t: "Ring", d: "Devices form a data loop. Also called ring network. Data travels in one direction." },
+        { t: "Bus (Line)", d: "All devices connect in a line with a terminator at each end. Less common now. Less adaptable." },
+      ]},
+      { heading: "Types of Networks", body: [
+        { t: "PAN (Personal Area Network)", d: "Wirelessly connects devices around one individual — smartphone, smartwatch, laptop, printer, car." },
+        { t: "LAN (Local Area Network)", d: "Network within a small area/building. Organisation 'owns' the links (cabling). Home or small office." },
+        { t: "WAN (Wide Area Network)", d: "Connects multiple LANs over wider area. Internet is the world's largest WAN. Can be self-contained for security." },
+        { t: "VPN (Virtual Private Network)", d: "Secure, private connection between user and VPN provider. Hides IP address. Allows use of public networks without revealing browsing history." },
+      ]},
+      { heading: "Factors Affecting Choice of Network", body: [
+        { t: "User needs", d: "Purpose of network — individual needs wireless; games company needs private servers globally." },
+        { t: "Specifications", d: "Speed, capacity, operating power — graphic design needs higher spec than office admin." },
+        { t: "Connectivity", d: "Individual: wireless home hub. Organisation: ethernet LAN. Bank: fibre optic WAN." },
+        { t: "Cost", d: "Higher specification = greater cost. Reliability and security increase cost." },
+        { t: "Efficiency", d: "Buffering/dropout costs businesses money." },
+        { t: "Compatibility", d: "Most devices from any manufacturer can connect wirelessly; manufacturers follow international standards." },
+        { t: "Implementation", d: "Timescales, testing, downtime, familiarity." },
+        { t: "Productivity", d: "Slowly transmitted data has major impact. Remote diagnosis improves manufacturing." },
+        { t: "Security", d: "Encryption, strong passwords, closed networks prevent hacking." },
+      ]}
+    ]
+  },
+  {
+    id: 12, num: "1.14", title: "Issues Related to Transmission of Data",
+    pills: ["Protocols", "SMTP", "HTTP", "HTTPS", "Compression"],
+    sections: [
+      { heading: "Protocols", content: `Rules that allow systems to communicate. Dictate how transmission is initiated, data encoded, and how it is terminated.` },
+      { heading: "Email Protocols", body: [
+        { t: "SMTP", d: "Simple Mail Transfer Protocol — sends mail from email client to mail server and on to recipient." },
+        { t: "POP3", d: "Post Office Protocol 3 — retrieves mail from server to email client. Does NOT leave a copy on server." },
+        { t: "IMAP", d: "Internet Message Access Protocol — messages synchronised between server and client; accessible on multiple devices." },
+      ]},
+      { heading: "VOIP", content: `Voice Over Internet Protocol — transmit and receive audio/video. Saves costs vs landline. Protocols: RTP (Real-Time Transport) and SIP (Session Initiation Protocol).` },
+      { heading: "HTTP and HTTPS", content: `HTTP: Hypertext Transfer Protocol — how web browsers request pages. HTTPS: secure version — used for banking, personal profiles, shopping. TLS/SSL encryption.` },
+      { heading: "Secure Payment Systems", content: `Additional security for online payments: phishing protection, 2FA (Two-Factor Authentication), biometric tools (face/fingerprint scanning).` },
+      { heading: "Security Issues When Transmitting", body: [
+        { t: "Interception", d: "The biggest danger — someone accessing data without permission." },
+        { t: "Password protection", d: "Strong passwords essential, especially for wireless networks." },
+        { t: "Physical hacking", d: "Network cables can be physically intercepted." },
+        { t: "Encryption and digital certificates", d: "Must be correctly used." },
+        { t: "Low-security systems", d: "Avoid sending important data via unencrypted email or text." },
+      ]},
+      { heading: "Bandwidth and Latency", content: `Bandwidth = data-carrying capacity (bps or Mbps). Latency = time for data to travel from one point to another. Affected by: time of day, time zones, distance to exchange, volume of data.` },
+      { heading: "Compression Types", body: [
+        { t: "Lossy", d: "Removes data that cannot be recovered — reduces sound/image quality. Used in JPEG, MP3. Microsoft Office can compress images." },
+        { t: "Lossless", d: "Filters unnecessary data and reduces number of bits but data can be retrieved. No loss of quality. Used in FLAC, GIF, TIFF." },
+      ]},
+      { heading: "Codecs", content: `Hardware or software that encodes and decodes data — compression, smaller files, quicker transmission. Common video codec: H.264 (used by streaming services).` },
+    ]
+  },
+  {
+    id: 13, num: "1.15", title: "Cloud Computing Models",
+    pills: ["Private", "Public", "Hybrid", "SaaS", "IaaS", "PaaS"],
+    sections: [
+      { heading: "What is Cloud Computing?", content: `Access files, software, resources and games via a remote server from anywhere using the internet. Reduces need for local storage; allows remote working.` },
+      { heading: "Types of Cloud", body: [
+        { t: "Private cloud", d: "Sole use by an organisation. Only company owners, employees and tech team have access. Customisable. Created by a third party or set up by the organisation." },
+        { t: "Public cloud", d: "Used by both individuals and organisations. Google, Microsoft, Apple offer mixes of applications, storage and collaborative tools." },
+        { t: "Hybrid cloud", d: "Combines public and private. Scalable. Raises security concerns due to third-party involvement." },
+      ]},
+      { heading: "Cloud Service Models", body: [
+        { t: "IaaS (Infrastructure as a Service)", d: "Rent servers, storage and networks on demand. Pay for what you use. E.g. Amazon Web Services." },
+        { t: "SaaS (Software as a Service)", d: "Software solutions (email, office tools, storage) on a monthly/annual subscription. E.g. Microsoft 365, Google Workspace." },
+        { t: "PaaS (Platform as a Service)", d: "Complete service for running, developing and testing applications in the cloud. E.g. Microsoft Azure." },
+      ]},
+      { heading: "Implications for Individuals", body: [
+        { t: "Concerns", d: "Will syncing save time? Is cost reasonable? What level of tech understanding? What if internet is lost? How is privacy handled?" },
+      ]},
+      { heading: "Implications for Organisations", body: [
+        { t: "Concerns", d: "Potential data loss, security breaches. Need policies on professional use, contingency for downtime, data protection laws (UK), staff training, balancing cost vs local infrastructure." },
+      ]},
+    ]
+  },
+  {
+    id: 14, num: "1.16", title: "Online Systems for Remote Working",
+    pills: ["VPN", "Remote Desktop", "Scalability", "Connectivity"],
+    sections: [
+      { heading: "VPNs for Remote Working", content: `Virtual Private Networks create a private 'tunnel' across the public internet. Remote worker connects securely with little risk of interception. VPNs only work if device defaults to working online. Files are inaccessible offline unless settings reconfigured.` },
+      { heading: "Remote Desktop Technologies", content: `Enable authorised individuals to access your desktop/OS remotely. Centralised technical teams can support remote workers without travel or physical device transport.` },
+      { heading: "Factors Affecting Online System Selection", body: [
+        { t: "Security", d: "HTTPS URL, established reputation. Organisations use VPN and firewall for integrity." },
+        { t: "Cost", d: "Pay-as-you-go, short-term contracts, free apps for individuals. Businesses need fees for domain names." },
+        { t: "Ease of use", d: "Browser-based vs app-based. Training and tech understanding required." },
+        { t: "Features", d: "Storage, development services, hybrid cloud; level of technical support." },
+        { t: "Connectivity", d: "Fibre optic — stable/reliable; 4G/5G — mobile backup; Satellite — slow/expensive; Wi-Fi hotspots — built-up areas." },
+        { t: "Scalability", d: "Ability to scale number of devices/users. Must be future-proofed. Cloud providers may limit simultaneous users." },
+      ]}
+    ]
+  },
+  {
+    id: 15, num: "1.17–1.18", title: "Online Communities",
+    pills: ["Social Media", "Wiki", "Forum", "Chatrooms", "Blogs"],
+    sections: [
+      { heading: "Ways of Communicating Online", body: [
+        { t: "Social media", d: "Facebook, X (Twitter), YouTube, Instagram, TikTok. Free, ad-funded. Share content globally." },
+        { t: "Blog/Vlog", d: "Date-stamped online journals. YouTube, TikTok, Instagram as vlog platforms." },
+        { t: "Wiki", d: "Community-contributed website. Most famous: Wikipedia. Anyone can edit — reliability questionable. Used by IBM, Sony, SAP." },
+        { t: "Chatrooms", d: "Groups of users discuss topics in public or private — WhatsApp, Facebook groups." },
+        { t: "Instant messaging", d: "Live messaging window — WhatsApp, Facebook Messenger, Snapchat, WeChat." },
+        { t: "Podcasts", d: "Date-stamped audio files; downloadable to digital devices." },
+        { t: "Forums", d: "Invite participation in discussion on shared interest topics. Not real-time. Reddit, Quora. Moderated by administrator." },
+      ]},
+      { heading: "Considerations for Using Online Communities", body: [
+        { t: "User experience", d: "Ease of use, performance, availability, accessibility." },
+        { t: "Cost", d: "Free social networks — revenue from advertising and user data. Premium versions remove ads." },
+        { t: "Meeting user needs", d: "Platforms continuously improve features. Must work across range of devices and operating systems." },
+        { t: "Privacy", d: "Identity theft and fraud are commonplace. Check and edit privacy settings." },
+        { t: "Security", d: "Never share usernames and passwords. Check security offered before joining." },
+        { t: "Downtime", d: "Inconvenience for individuals; financial impact for organisations." },
+        { t: "Training", d: "COVID-19 massively increased online training via videos and tutorials." },
+        { t: "Integration", d: "Consider: does existing system link and exchange data? Additional training? Compatible with OS and devices?" },
+        { t: "Productivity", d: "New community should increase productivity; policies needed to prevent social networking during work hours." },
+        { t: "Working practices", d: "Organisations must put policies in place when introducing online communities." },
+      ]}
+    ]
+  },
+  {
+    id: 16, num: "1.19", title: "Threats to Data, Information and Systems",
+    pills: ["Malware", "Hacking", "Social Engineering", "Internal Threats"],
+    sections: [
+      { heading: "External Threats", body: [
+        { t: "Malware/Viruses", d: "Malicious software. Viruses passed via USB sticks, downloaded software, internet files. Can corrupt files and compromise data." },
+        { t: "Hackers", d: "'Hacker' = anyone accessing IT system without permission. Criminal intent, curiosity, or as an employee (ethical hacking)." },
+        { t: "Accidental damage", d: "Accidentally selecting 'No' when closing, power cuts before saving, physically dropping device." },
+        { t: "Social engineering", d: "Psychological manipulation — manipulating users into sharing passwords or bank details." },
+        { t: "Natural disasters", d: "Floods, fires, power cuts — data corrupted, lost or physically destroyed." },
+      ]},
+      { heading: "Internal Threats", body: [
+        { t: "Accessing inappropriate websites", d: "Risk of coercion into illegal activities; data breaches from criminals." },
+        { t: "Accidental disclosure", d: "Profile pages with contact details displayed online; wrong attachment sent; stealing/leaking info." },
+        { t: "Use of portable devices", d: "Devices easily lost, misplaced or left on public transport. 325,000+ mobile phone thefts in 2020 (UK)." },
+      ]},
+      { heading: "Impact of Threats", body: [
+        { t: "Loss of data", d: "Devastating personally; organisationally could include account details, customer records, invoices." },
+        { t: "Financial loss / legal action", d: "GDPR breaches result in significant fines. UK legislation protects against threats." },
+        { t: "Loss of customers", d: "Loss of public confidence leads customers to take business elsewhere." },
+      ]}
+    ]
+  },
+  {
+    id: 17, num: "1.20", title: "Protecting Data",
+    pills: ["Passwords", "Encryption", "Backup", "Access Levels", "Biometrics"],
+    sections: [
+      { heading: "File Permissions", content: `Access to files restricted through passwords or by setting file as read-only (can be read but not changed or resaved).` },
+      { heading: "Access Levels", content: `Data protected by allowing users access only to those systems required for their role. Different levels of permission linked to username — e.g. view-only vs edit access to customer database.` },
+      { heading: "Backup and Recovery", body: [
+        { t: "Full backup", d: "Includes ALL system files, applications and documents." },
+        { t: "Incremental backup", d: "Only files changed since previous backup. Quicker; should be done more often." },
+        { t: "Server farm", d: "Large organisations keep original and backup system at different sites to prevent simultaneous damage." },
+        { t: "Disaster recovery", d: "Secondary 'live' backup mirroring the primary system." },
+      ]},
+      { heading: "Passwords and Multi-Factor Authentication (MFA)", content: `Strong password: at least 12 characters, mix of upper/lowercase, numbers and symbols. MFA adds a second layer — code sent to device only the user has.` },
+      { heading: "Biometrics", content: `Use unique face, voice, eyes or fingerprints to confirm identity. Used in smartphones, passport control. Privacy concern: biometric data must be stored.` },
+      { heading: "Physical Access Control", content: `Device should always be logged off or shut down when not in use. Restrict physical access to data centres. Prevent peripheral devices being plugged in.` },
+      { heading: "Digital Certificates", content: `Unique codes assigned by official provider — verify identity of individual or organisation. Used for online banking, statements. Also called a <strong>public key certificate</strong>. Work like a passport.` },
+    ]
+  },
+  {
+    id: 18, num: "1.21", title: "Antivirus, Firewalls and Encryption",
+    pills: ["Antivirus", "Firewall", "Encryption", "HTTPS", "PGP"],
+    sections: [
+      { heading: "Antivirus Software", content: `Searches for and prevents attempts to infect an IT system with a virus. Features: real-time scanning, periodic deep scans, looking for 'virus-like' activity, live virus definition database (updated daily).`, tip: "Constant antivirus scanning increases load on system and reduces performance." },
+      { heading: "Firewalls", content: `Monitors and controls network traffic between device and internet. Can be hardware- or software-based. Protects from unauthorised access. Features range from basic port blocking to advanced stateful packet inspection (SPI).`, tip: "Software firewalls must be stored locally on the device, not on a network." },
+      { heading: "Encryption", content: `Converts data into meaningless code that can only be decrypted with a key. A public key encrypts; a private key decrypts. Message and encryption key are NEVER saved or transmitted together.` },
+      { heading: "Types of Data Encryption", body: [
+        { t: "Stored data", d: "Encrypting stored data means even if accessed by a hacker, it cannot be read without a private key." },
+        { t: "Data during transmission", d: "Transmitted data is often NOT secure — emails sent in plain text. PGP (Pretty Good Privacy) encrypts email contents." },
+        { t: "End-to-end encryption", d: "Only people at each end can read the message. WhatsApp, Facebook Messenger, Signal use this by default." },
+        { t: "HTTPS (SSL or TLS)", d: "Used by websites with financial details, shopping, personal profiles. Avoid using public computers, open Wi-Fi, or leaving browser unattended." },
+      ]}
+    ]
+  },
+  {
+    id: 19, num: "1.22–1.23", title: "Online Services",
+    pills: ["Retail", "Finance", "Education", "MOOC", "Transactional Data"],
+    sections: [
+      { heading: "Features and Implications — Retail", content: `Anything can be purchased online 24/7. Products may not be regulated, pirated or unregulated. Local physical shops struggle to compete with low prices.` },
+      { heading: "Financial Services", content: `Online advice, banking, loans, mortgages, investments. Regulated by FCA and PRA. Not every service is authentic — check carefully. Online global access.` },
+      { heading: "Education and Training", content: `Online research, video conferencing, academic institutions, MOOCs (Massive Open Online Courses). Can lead to unscrupulous training organisations issuing unregulated certificates.` },
+      { heading: "News and Information", content: `Online newspapers, but unregulated broadcasters promote unsubstantiated stories — rise of 'fake news'. Constant information flow disrupts work and concentration.` },
+      { heading: "Entertainment and Leisure", content: `TV, films, music, games on demand via streaming apps. Many free via subscription model. Online gambling risks from unregulated spending.` },
+      { heading: "Booking Systems", content: `Online transport, events, holidays, restaurants. E-ticket as proof of purchase. Security risk — data collected during transactions; opt out to avoid marketing use.` },
+      { heading: "Transactional Data", content: `Information generated every time an online transaction is made. Includes personal data, items/services, payments, dates. Used for targeted marketing and adjusting promotions. Collected via browser cookies and loyalty cards.` },
+      { heading: "Targeted Marketing", content: `Data used to target new and existing customers. Enticements (targeted vouchers) for similar purchase history. Less scrupulous practices include fraudulent charity requests and phishing.` },
+      { heading: "Collaborative Working", content: `Two or more individuals simultaneously work on same document/files from local or remote location. Examples: students on group presentation, small business with accountant, reporters on shared article.` },
+      { heading: "Remote Working", content: `Online services enable location-independent teamwork. Relies on internet connection and suitable device. Travel reduction saves money; flexibility for family situations. Risk: hackers on cloud.` },
+    ]
+  },
+  {
+    id: 20, num: "1.24–1.26", title: "Using and Manipulating Data",
+    pills: ["Primary", "Secondary", "Verification", "Validation", "Data Accuracy"],
+    sections: [
+      { heading: "Sources of Data", body: [
+        { t: "Primary data", d: "Collected/generated by the individual or organisation: surveys, interviews, sensors, new customer lists." },
+        { t: "Secondary data", d: "Brought in or collected by someone else: research articles, government reports, newspaper reports, reference books, catalogues." },
+      ]},
+      { heading: "Methods of Ensuring Reliability", content: `Cannot assume everything is reliable. Cross-referencing sources improves reliability. Plagiarism is a serious offence — claiming content you didn't create. Software exists to detect plagiarism.` },
+      { heading: "Methods of Collecting Data", body: [
+        { t: "Survey", d: "Collects wide range of opinions. Qualitative (sentence) or quantitative (numeric/scale). Online surveys save time. Even number of options avoids 'middle option' bias." },
+        { t: "Questionnaire", d: "More structured than survey. Focuses on specific audience. Open questions harder to analyse." },
+        { t: "Focus groups", d: "Gather information from groups with shared interests. Face-to-face. Less reliable if group leader skews opinions." },
+        { t: "Interview", d: "Interactive — interviewer probes for clarity. Time-consuming. Can produce useful results if repeated with range of people." },
+      ]},
+      { heading: "Reasons for Ensuring Data Accuracy", content: `Business operations depend on data accuracy. Human error is common: careless entry, spelling mistakes, misread data, duplications, omissions, inadequate data cleansing. Inaccurate data = useless data.` },
+      { heading: "Methods of Ensuring Data Accuracy", body: [
+        { t: "Verification", d: "Checking data with original source to confirm match or spot inaccuracy. Entering data twice; additional code by text when logging in." },
+        { t: "Validation", d: "Pre-programmed instruction (macro or parameters) to check data makes sense. E.g. age field only accepts 50-80; UK mobile must start with '07' and be 11 digits. Does NOT check if the data is correct — only if it appears reasonable." },
+      ]},
+      { heading: "User Interfaces for Data Collection", body: [
+        { t: "Ease of use", d: "Should allow input, manipulation and extraction without specialist IT knowledge." },
+        { t: "Accessibility", d: "Guide users through icons and prompts; can be activated by voice." },
+        { t: "Error reduction", d: "Input mask with parameters; warning messages for refused data." },
+        { t: "Functionality", d: "Data entry/editing tools, search/filter, report generation, database linking, maintenance tools." },
+        { t: "Performance", d: "CPU, memory and storage capacity choices must account for database size and calculation complexity." },
+        { t: "Compatibility", d: "Use CSV or tab-delimited files to import/export between applications." },
+      ]}
+    ]
+  },
+  {
+    id: 21, num: "1.27", title: "Moral and Ethical Issues",
+    pills: ["Privacy", "E-Waste", "Digital Divide", "Netiquette", "AUP"],
+    sections: [
+      { heading: "Morals vs Ethics", content: `<strong>Morals</strong> = knowing the difference between right and wrong. <strong>Ethics</strong> = standards and principles that govern behaviour.` },
+      { heading: "Privacy", content: `Ethical judgement needed when giving personal information into IT systems. Onlookers reading messages in public spaces. Photos/videos taken without permission posted on social media. UK Online Safety Act 2023 — illegal to share digitally manipulated sensitive/explicit images.` },
+      { heading: "Environmental Impact", content: `E-waste = electronic hardware/printer cartridges in landfill — produce carcinogens, leak chemicals. E-waste increases 3x faster than world population. <25% recycled. Technology also reduces travel emissions; remote work lowers carbon footprint. New, more efficient tech replacing older fossil fuel burning systems.` },
+      { heading: "Unequal Access — Digital Divide", content: `Physical lack of access to technology or skills gap. Unequal access means missing out on educational resources, news, employment opportunities and cheaper products. WHO (2022): only 3% of low-income country populations have access to assistive tech.` },
+      { heading: "Access to Assistive Technology", content: `Moral issues around imbalance of cost, availability and awareness. 90% access in high-income vs 3% in low-income countries.` },
+      { heading: "Online Behaviour and Netiquette", content: `Rules of <strong>netiquette</strong>: never use abusive language, do not harass, never say anything you wouldn't say in person, be aware of the whole group, never share another person's content with a third party, do not share personal information insecurely.` },
+      { heading: "Acceptable Use Policies (AUP)", content: `State protocols for what is deemed morally/ethically acceptable for IT system use. Apply to all employees/members. Constrain website content, software use, use of personal devices for business, security of personal content, agreeing to follow government legislation.` },
+    ]
+  },
+  {
+    id: 22, num: "1.28–1.29", title: "Legal Issues",
+    pills: ["Computer Misuse Act", "GDPR", "Copyright", "DSE Regulations"],
+    sections: [
+      { heading: "Computer Misuse Act 1990", body: [
+        { t: "Offence 1", d: "Intentional unauthorised access to system/program/data — up to 2 years in prison and fine." },
+        { t: "Offence 2", d: "Intention to commit a criminal act using material accessed without permission — up to 5 years in prison and fine." },
+        { t: "Offence 3", d: "Modification including intentional damage of a computer system — up to 10 years in prison and fine." },
+      ]},
+      { heading: "Police and Justice Act 2006 (Computer Misuse amendments)", content: `Includes specific act of a DoS (Denial of Service) attack and distribution of hacking tools. Increased fines and lengths of imprisonment.` },
+      { heading: "Serious Crime Act 2015", content: `Expands Computer Misuse Act to include attacks on national security, critical infrastructure (power plants, transport) and people's welfare.` },
+      { heading: "Copyright, Designs and Patents Act 1988", content: `Organisations and individuals who create original material have right to control how it is used. Cannot be copied, sold, rented or performed without permission. Covers: broadcasting, artwork/music/film/video games, original literary content including databases.` },
+      { heading: "Copyright (Computer Programs) Regulations 1992", content: `Expands Copyright Act to include: Northern Ireland jurisdiction, computer program literary works, restrictions on copying/adapting/converting computer programs, permission to back up programs for lawful use.` },
+      { heading: "Health and Safety (DSE) Regulations 1992", content: `Rules for using 'any device or equipment with alphanumeric or graphic display screen'. For PCs, laptops, tablets used for long periods. Implications: <strong>Repetitive Strain Injury (RSI)</strong>. Employers must consider ergonomic equipment, training, regular breaks. Includes hot-desking and remote working.` },
+      { heading: "Data Protection Act 2018 (GDPR)", content: `Copying someone's data without permission is against the law. Updated from 1998 Act — extends restrictions, includes rules about disclosure and use of data. 'Everyone responsible for using personal data must follow strict data protection principles.' Fines up to £17.5m or 4% of annual global turnover. Businesses must disclose CCTV use; notify ICO.` },
+    ]
+  }
+];
+
+// =====================================================
+// QUIZ QUESTIONS — 100+ questions covering all topics
+// =====================================================
+const allQuestions = [
+  // 1.1 Features of digital devices
+  { q: "What does MFD stand for?", a: 0, opts: ["Multifunctional Device","Multi-frequency Display","Memory Function Drive","Mobile Feature Device"], explain: "MFDs (Multifunctional Devices) are also known as All-In-One (AIO) devices — printers that also scan, photocopy, email and connect wirelessly.", topic: "1.1 Digital Devices" },
+  { q: "Which standard does Wi-Fi (wireless networking) refer to?", a: 2, opts: ["IEEE 802.13","Bluetooth 5.0","IEEE 802.11","IEEE 802.15"], explain: "Wi-Fi is a trademarked term referring to IEEE 802.11 wireless standards.", topic: "1.1 Digital Devices" },
+  { q: "What is the maximum range of a Bluetooth connection?", a: 1, opts: ["50 metres","10 metres","1 metre","100 metres"], explain: "Bluetooth devices typically have a maximum range of 10 metres.", topic: "1.1 Digital Devices" },
+  { q: "What is IoT?", a: 3, opts: ["Internet of Transactions","Interactive Online Technology","Index of Technology","Internet of Things"], explain: "IoT = Internet of Things — the collective group of devices that connect to each other and exchange data over networks including the internet.", topic: "1.1 Digital Devices" },
+  { q: "What do sensors respond to?", a: 0, opts: ["Changes in the physical environment","Network traffic","File compression","Database queries"], explain: "Sensors respond to changes in the physical environment such as movement, light, temperature or sound.", topic: "1.1 Digital Devices" },
+  { q: "Which server stores data files centrally so multiple people can access them?", a: 2, opts: ["Web server","Application server","File server","Proxy server"], explain: "A file server stores data files centrally, stores software centrally, shares access to devices like printers and authenticates users.", topic: "1.1 Digital Devices" },
+  { q: "What transmission method uses pulses of light across vast distances?", a: 1, opts: ["Bluetooth","Fibre optic cable","Wi-Fi","Ethernet"], explain: "Fibre optic cable transmits data using pulses of light and is used to deliver superfast broadband.", topic: "1.1 Digital Devices" },
+  { q: "What speed does 4G provide as a maximum?", a: 2, opts: ["10 Mbps","25 Mbps","50 Mbps","75 Mbps"], explain: "4G provides connectivity at speeds up to 50 Mbps. 5G starts from 75 Mbps upwards.", topic: "1.1 Digital Devices" },
+
+  // 1.2 Function and Uses
+  { q: "What does RFID stand for?", a: 0, opts: ["Radio Frequency Identification","Remote File Information Database","Real-time Financial Integration Data","Radio Function Identity Device"], explain: "RFID = Radio Frequency Identification. Tags automatically scan and track stock from factory to store.", topic: "1.2 Uses of Devices" },
+  { q: "What does NFC stand for?", a: 3, opts: ["Network Function Control","Non-Functional Connection","New Frequency Communication","Near Field Communication"], explain: "NFC = Near Field Communication. Used for contactless payments by tapping a mobile phone or smartwatch.", topic: "1.2 Uses of Devices" },
+  { q: "What does CAD stand for in manufacturing?", a: 1, opts: ["Computer-Aided Delivery","Computer-Aided Design","Computer-Automated Drawing","Central Advanced Drafting"], explain: "CAD = Computer-Aided Design. Used to create technical drawings in textiles, architecture and furniture design.", topic: "1.2 Uses of Devices" },
+  { q: "What does CAM stand for?", a: 2, opts: ["Computer-Aided Medicine","Computer-Automated Management","Computer-Aided Manufacturing","Central Automated Machinery"], explain: "CAM = Computer-Aided Manufacturing. Used for mass production — CNC machines mill, turn, mould and cut materials with precision.", topic: "1.2 Uses of Devices" },
+  { q: "What does EFTPOS stand for?", a: 0, opts: ["Electronic Funds Transfer at Point of Sale","Electronic Finance Transfer Payment Online Service","Encrypted Funds Transaction Processing Overall System","Electronic Federal Transaction Payment Online Service"], explain: "EFTPOS = Electronic Funds Transfer at Point of Sale. Systems used for credit/debit card transactions and ATMs.", topic: "1.2 Uses of Devices" },
+
+  // 1.3 Notation
+  { q: "What shape represents a DECISION in a flowchart?", a: 3, opts: ["Rectangle","Parallelogram","Oval","Diamond"], explain: "A diamond shape represents a decision in a flowchart (Y/N branches).", topic: "1.3 Notation" },
+  { q: "What shape represents INPUT/OUTPUT in a flowchart?", a: 1, opts: ["Rectangle","Parallelogram","Diamond","Circle"], explain: "A parallelogram represents input/output in a flowchart.", topic: "1.3 Notation" },
+  { q: "In a Data Flow Diagram (DFD), what does an oval/ellipse represent?", a: 0, opts: ["A person or entity","A process","A database","Data flow"], explain: "In a DFD, an oval/ellipse represents a person, other entity or system.", topic: "1.3 Notation" },
+  { q: "What does a rectangle (numbered) represent in a DFD?", a: 2, opts: ["A person","A database","A process","An arrow"], explain: "A numbered rectangle in a DFD represents a process being carried out.", topic: "1.3 Notation" },
+
+  // 1.4 Peripherals
+  { q: "Which type of peripheral device sends information TO the computer?", a: 0, opts: ["Input device","Output device","Storage device","Processing device"], explain: "Input devices interact with or send information to a computer. Examples: keyboard, mouse, webcam, microphone, joystick.", topic: "1.4 Peripherals" },
+  { q: "Which assistive technology reads aloud the words on a computer screen?", a: 2, opts: ["Braille display","Adaptive keyboard","Screen reader","Eye-tracking software"], explain: "Screen readers read aloud the words or content on a computer screen. Examples include JAWS and Dolphin's Supernova.", topic: "1.4 Peripherals" },
+  { q: "What is the UK government's definition of 'assistive technology'?", a: 1, opts: ["Software that automates office tasks","Products or systems that support individuals with disabilities to perform functions otherwise difficult or impossible","Hardware specifically designed for gaming","Software used in medical environments only"], explain: "The UK government defines assistive technology as products or systems that support and assist individuals with disabilities, restricted mobility or other impairments to perform functions that might otherwise be difficult or impossible.", topic: "1.4 Peripherals" },
+  { q: "What does TTS stand for?", a: 3, opts: ["Transfer to Storage","Technical Training Support","Touch Tablet System","Text-to-Speech"], explain: "TTS = Text-to-Speech (also called voice recognition software). Allows users to give instructions by voice rather than keyboard.", topic: "1.4 Peripherals" },
+
+  // 1.5 Storage
+  { q: "Which storage type is fastest?", a: 1, opts: ["Magnetic HDD","Solid State Drive (SSD)","Optical disc (DVD)","All are equally fast"], explain: "Solid state memory (SSD) is much faster than magnetic hard drives or optical discs.", topic: "1.5 Storage" },
+  { q: "What does 'lossless' compression mean?", a: 2, opts: ["Data quality is permanently reduced","File cannot be recovered","Data can be retrieved in full with no loss of quality","File size increases"], explain: "Lossless compression reduces file size by filtering out unnecessary data — the original data can be retrieved without quality loss.", topic: "1.5 Storage" },
+  { q: "What is the difference between full and incremental backup?", a: 0, opts: ["Full backup includes all files; incremental only includes files changed since last backup","Full backup is slower; incremental is always full","Incremental includes all files; full only includes changed files","There is no difference"], explain: "A full backup includes all system files, applications and documents. An incremental backup only includes files changed since the previous backup — it is quicker.", topic: "1.5 Storage" },
+  { q: "Give an example of AUTOMATIC data processing.", a: 3, opts: ["Updating customer records using a keyboard","Processing sales at checkout","Entering survey data on a tablet","Smart meter transmitting energy readings"], explain: "Automatic data processing occurs in the background with very little user input, e.g., smart meters transmitting energy readings, generating invoices, weather monitoring.", topic: "1.5 Storage" },
+
+  // 1.6 OS
+  { q: "Which type of OS is used for air-traffic control and stock markets?", a: 2, opts: ["Mobile OS","Batch OS","Real-time OS","Single-user OS"], explain: "Real-time OS processes data in current real time where quick responses and reliability are essential. Examples: air-traffic control, stock markets, medical scanners.", topic: "1.6 Operating Systems" },
+  { q: "What is the role of 'device drivers' in an OS?", a: 1, opts: ["Manage memory allocation","Link the digital device with peripherals such as printers","Run multiple applications simultaneously","Control user account settings"], explain: "The OS manages peripheral devices by using a driver to link the digital device with peripherals (e.g., printers). These are regularly updated.", topic: "1.6 Operating Systems" },
+  { q: "Which OS type organises similar jobs and sends them in batches to the computer?", a: 0, opts: ["Batch OS","Network OS","Mobile OS","Distributed OS"], explain: "Batch OS allows the user to organise lots of similar jobs sent in batches. Does not interact directly with computer. Used for bank statements, wage slips.", topic: "1.6 Operating Systems" },
+  { q: "What is a Distributed Operating System?", a: 3, opts: ["OS for a single user device","OS that runs on a mobile device","OS that manages batch processing","OS where processes run on multiple interconnected computers acting as one"], explain: "A Distributed OS is a model where processes run on multiple interconnected computers acting as a single system. Examples: social networks, online gaming, e-learning platforms.", topic: "1.6 Operating Systems" },
+  { q: "What does 'memory management' do in an OS?", a: 2, opts: ["Backs up data","Manages firewall settings","Allocates available memory so the most important tasks and applications have the memory to run","Updates device drivers"], explain: "Memory management decides how available memory is allocated so the most important tasks and applications have the memory to run.", topic: "1.6 Operating Systems" },
+  { q: "Which Linux feature makes it particularly suitable for lower-spec computers?", a: 1, opts: ["It has better security","It is open source, lightweight and performs faster on lower specs","It is proprietary so more reliable","It has more applications"], explain: "Linux is open source and often a simpler, lightweight OS, meaning it will perform much faster on lower-specification machines compared to Windows.", topic: "1.6 Operating Systems" },
+
+  // 1.7 Software
+  { q: "What is open source software?", a: 0, opts: ["Free to use, edit and give away for any purpose","Software that costs a subscription fee","Software that is only available in source code format","Software with a one-off payment"], explain: "Open source software is free to use, edit, give away and use for any purpose. Created by one or more programmers who give up ownership.", topic: "1.7 Computer Software" },
+  { q: "What file format is .docx associated with?", a: 2, opts: ["Excel spreadsheet","PowerPoint presentation","Word document","Access database"], explain: ".docx is the Microsoft Word file format.", topic: "1.7 Computer Software" },
+  { q: "What does 'lossy' compression mean?", a: 3, opts: ["Lossless but slower","Data is encrypted","File size cannot be reduced","Data is permanently removed to compress the file"], explain: "Lossy compression removes data from the file that cannot be recovered. This may result in loss of information such as sound quality.", topic: "1.7 Computer Software" },
+  { q: "What is haptic technology associated with?", a: 1, opts: ["Keyboard shortcuts","Touchscreen GUI","Voice recognition","Satellite navigation"], explain: "Haptic technology is the touchscreen graphical user interface used on smartphones, tablets and hand-held games consoles.", topic: "1.7 Computer Software" },
+  { q: "What does .gif file format support that .jpg does not?", a: 0, opts: ["Animation","Higher resolution images","Lossless compression for photos","Professional RAW quality"], explain: ".gif is a lossless format used for online images AND animations, though only suitable for simple images.", topic: "1.7 Computer Software" },
+  { q: "Which audio format is Apple's version of .mp3?", a: 2, opts: [".flac",".wav",".aac",".alac"], explain: ".aac is an Apple version of .mp3 used for lossy compressed audio.", topic: "1.7 Computer Software" },
+  { q: "What is a command line interface (CLI)?", a: 1, opts: ["An interface based on touch","A text-only interface where the computer is operated by inputting commands","A menu-based interface","A graphical interface with icons"], explain: "A CLI (Command Line Interface) is a text-only screen where a computer is operated by inputting commands. It provides more flexibility than a GUI but requires knowledge of OS-specific commands.", topic: "1.7 Computer Software" },
+
+  // 1.8-1.9 Choosing IT
+  { q: "What does TCO stand for?", a: 0, opts: ["Total Cost of Ownership","Technology Control Output","Transaction Control Operations","Total Computer Output"], explain: "TCO = Total Cost of Ownership. Businesses calculate this using standard formulae to account for the full range of device costs, not just initial purchase price.", topic: "1.8–1.9 Choosing IT" },
+  { q: "What is 'downtime' in the context of IT systems?", a: 3, opts: ["When the system is fastest","Regular maintenance windows","Staff lunch breaks","The period when devices, internet or networks are out of action"], explain: "Downtime is the period of time when digital devices, internet or networks are out of action. It costs businesses money so they want to avoid it as much as possible.", topic: "1.8–1.9 Choosing IT" },
+  { q: "What is CRM?", a: 1, opts: ["Central Remote Management","Customer Relationship Management","Compressed Response Media","Computer Resource Monitoring"], explain: "CRM = Customer Relationship Management. A specialist system used by businesses to manage customer interactions.", topic: "1.8–1.9 Choosing IT" },
+  { q: "What is MIS?", a: 2, opts: ["Mobile Internet Service","Multiple Input Signals","Management Information System","Monitoring and Integration Software"], explain: "MIS = Management Information System. A specialist bespoke system used by organisations.", topic: "1.8–1.9 Choosing IT" },
+
+  // 1.11 Emerging Tech
+  { q: "What does VOIP stand for?", a: 0, opts: ["Voice Over Internet Protocol","Virtual Online Interface Protocol","Video and Online IP","Virtual Operations Internet Platform"], explain: "VOIP = Voice Over Internet Protocol. Allows users to transmit/receive audio and video streams and conduct live conversations. Saves costs vs landline contracts.", topic: "1.11 Emerging Tech" },
+  { q: "Who invented the World Wide Web and in what year?", a: 3, opts: ["Steve Jobs, 1984","Alan Turing, 1950","Bill Gates, 1995","Tim Berners-Lee, 1989"], explain: "Tim Berners-Lee invented the World Wide Web in 1989. By 2024, there were over 5 billion internet users.", topic: "1.11 Emerging Tech" },
+
+  // 1.12 Connectivity
+  { q: "What is USB-C used for?", a: 2, opts: ["Only for charging","Only for data transfer","Both data transmission and power supply across most smartphones and portable devices","Only for high-definition video output"], explain: "USB-C is now used across most smartphones and portable devices and can both transmit data (bidirectional) and provide power to devices.", topic: "1.12 Connectivity" },
+  { q: "What does LAN stand for?", a: 1, opts: ["Large Area Node","Local Area Network","Linked Application Node","Long-range Access Network"], explain: "LAN = Local Area Network. A network that provides a connection between digital devices within a small area or building.", topic: "1.13 Networks" },
+  { q: "What does WAN stand for?", a: 0, opts: ["Wide Area Network","Wireless Area Node","Wide Application Network","Web Access Node"], explain: "WAN = Wide Area Network. Uses telecommunications over a wider area, connecting multiple LANs together. The internet is the world's largest WAN.", topic: "1.13 Networks" },
+  { q: "What is a VPN used for?", a: 3, opts: ["Speeding up local file transfers","Connecting Bluetooth devices","Creating a public Wi-Fi hotspot","Creating a secure private connection that hides IP address over public networks"], explain: "A VPN (Virtual Private Network) creates a secure, private connection between you and a VPN provider. It hides your IP address and allows use of public networks without giving away browsing history or location.", topic: "1.13 Networks" },
+  { q: "Which network topology is the most common?", a: 0, opts: ["Star","Ring","Bus","Mesh"], explain: "Star topology is the most common. Each device connects to a central hub/router, similar to how home devices connect to a central router.", topic: "1.13 Networks" },
+
+  // 1.14 Data Transmission Issues
+  { q: "Which email protocol is used to SEND emails?", a: 1, opts: ["POP3","SMTP","IMAP","FTP"], explain: "SMTP (Simple Mail Transfer Protocol) is used for sending emails. It transmits mail from an email client to a mail server and on to the recipient.", topic: "1.14 Data Transmission" },
+  { q: "What is the difference between POP3 and IMAP?", a: 2, opts: ["POP3 supports HTML; IMAP supports plain text","There is no difference — they do the same thing","POP3 downloads and removes email from server; IMAP synchronises messages so accessible on multiple devices","IMAP is only for sending email; POP3 is only for receiving"], explain: "POP3 retrieves mail from server to client and does NOT leave a copy on the server. IMAP synchronises messages between server and client, so they can be accessed on multiple devices.", topic: "1.14 Data Transmission" },
+  { q: "What does HTTPS provide compared to HTTP?", a: 0, opts: ["A secure version using SSL/TLS encryption — used for banking, personal profiles, shopping","Higher transmission speeds","Better image quality","Support for more file types"], explain: "HTTPS is the secure version of HTTP using SSL or TLS encryption. Used for websites requiring security such as banking, personal profiles and shopping.", topic: "1.14 Data Transmission" },
+  { q: "What is bandwidth?", a: 3, opts: ["The width of a network cable","How fast a computer processor works","The amount of data stored on a device","The data-carrying capacity of a network connection, measured in bps or Mbps"], explain: "Bandwidth is a measure of the data-carrying capacity of a network connection, measured in bits per second (bps) or megabits per second (Mbps).", topic: "1.14 Data Transmission" },
+  { q: "What is a codec?", a: 1, opts: ["A type of encryption key","A hardware or software process that encodes and decodes data, resulting in compression","A type of network protocol","A firewall component"], explain: "A codec is a hardware or software process that encodes and decodes data, resulting in compression, smaller file sizes and quicker transmission. H.264 is a common video codec.", topic: "1.14 Data Transmission" },
+
+  // 1.15 Cloud Computing
+  { q: "What is SaaS?", a: 0, opts: ["Software as a Service — software on subscription","Storage and Sharing","Secure Access and Storage","Server as a System"], explain: "SaaS = Software as a Service. Providers offer software solutions (email, office tools, storage) accessible on multiple devices via monthly or annual subscription.", topic: "1.15 Cloud Computing" },
+  { q: "What is IaaS?", a: 2, opts: ["Internet as a Service","Integration and Authentication System","Infrastructure as a Service — rent servers, storage and networks on demand","Internal Application Software"], explain: "IaaS = Infrastructure as a Service. Lets you rent servers, storage and networks on demand. You only pay for what you use.", topic: "1.15 Cloud Computing" },
+  { q: "What is a private cloud?", a: 3, opts: ["A cloud system only for private individuals","A cloud that operates without internet access","A free tier of cloud computing","A cloud service created for sole use by an organisation — only company owners, employees and technical team have access"], explain: "A private cloud is created when an organisation requires sole use of a cloud computing service. Only company owners, employees and technical team have access.", topic: "1.15 Cloud Computing" },
+  { q: "What is a hybrid cloud?", a: 1, opts: ["A cloud that mixes audio and video content","A combination of public and private cloud services enabling access to different features according to permission","A cloud hosted in multiple countries","A cloud only for hybrid vehicles"], explain: "A hybrid cloud combines public and private cloud services, enabling users to access software, storage and other services according to permission.", topic: "1.15 Cloud Computing" },
+
+  // 1.17-1.18 Online Communities
+  { q: "What is a wiki?", a: 0, opts: ["A website or database contributed to by a community of users that anyone can add to or edit","A type of online game","A form of encrypted messaging","A search engine algorithm"], explain: "A wiki is a website or database contributed to by a community of users who work together to add content. The most famous wiki is Wikipedia. The information cannot be assumed to be reliable.", topic: "1.17–1.18 Online Communities" },
+  { q: "What is a podcast?", a: 2, opts: ["A live video call","A type of online forum","A date-stamped audio file in spoken word format, downloadable to a digital device","An encrypted messaging application"], explain: "Podcasts are date-stamped audio files, normally in spoken word format, downloadable to a digital device such as a smartphone.", topic: "1.17–1.18 Online Communities" },
+  { q: "How do forums differ from instant messaging?", a: 3, opts: ["Forums are faster","Forums encrypt messages; IM does not","Forums are only for organisations","Forums are not in real time — posted interactions can be read later; IM is live"], explain: "Forums are not in real time, unlike instant messaging. Posted interactions can be difficult to order, resulting in losing track of conversation flow.", topic: "1.17–1.18 Online Communities" },
+  { q: "What does AUP stand for in the context of online communities?", a: 1, opts: ["Automated Update Protocol","Acceptable Use Policy","Application Upload Platform","Authorised User Permission"], explain: "AUP = Acceptable Use (of IT) Policy. Many organisations implement these, stating protocols for what is deemed morally and ethically acceptable.", topic: "1.17–1.18 Online Communities" },
+
+  // 1.19 Threats
+  { q: "What is malware?", a: 0, opts: ["Malicious software designed to harm an IT system","A type of firewall","A method of data compression","A form of network topology"], explain: "Malware = 'malicious software'. Software designed to harm an IT system. A virus is a form of malware.", topic: "1.19 Threats" },
+  { q: "What is social engineering?", a: 3, opts: ["Building social media platforms","Using IT systems in social environments","Designing user-friendly software","The psychological manipulation of people into performing actions or divulging confidential information"], explain: "Social engineering is the psychological manipulation of people into performing actions or divulging confidential information such as passwords or bank details.", topic: "1.19 Threats" },
+  { q: "What legislation in the UK protects against threats to data?", a: 2, opts: ["Copyright Act 1988","Computer Misuse Act 1990","GDPR / Data Protection Act 2018","Freedom of Information Act 2000"], explain: "The GDPR (Data Protection Act 2018) exists in the UK to protect against threats to data. Significant fines may be issued for breaches.", topic: "1.19 Threats" },
+  { q: "What is a 'hacker'?", a: 1, opts: ["A programmer who writes code","Anyone who attempts to access an IT system without permission","A type of antivirus software","A network administrator"], explain: "'Hacker' is the term for anyone who attempts to access an IT system without permission. They can work alone or as part of a group.", topic: "1.19 Threats" },
+
+  // 1.20 Protecting Data
+  { q: "What is the minimum number of characters a strong password should have?", a: 2, opts: ["6","8","12","16"], explain: "A strong password should have at least 12 characters, be a combination of upper and lowercase letters and use numbers and symbols.", topic: "1.20 Protecting Data" },
+  { q: "What is multi-factor authentication (MFA)?", a: 0, opts: ["An additional layer of security — a second code sent to a device only the user should have","A method of encrypting data","A type of firewall","A backup procedure"], explain: "MFA adds an additional layer of security to a site or application. An additional code or password is requested on a device only the user should have (e.g., a PIN sent by text or email).", topic: "1.20 Protecting Data" },
+  { q: "What is the difference between a full backup and an incremental backup?", a: 3, opts: ["There is no difference","Incremental backups include all files","Full backups are faster","A full backup includes all system files; an incremental backup only includes files changed since the last backup"], explain: "A full backup includes all system files, applications and documents. An incremental backup only includes the files changed since the previous backup — quicker to perform.", topic: "1.20 Protecting Data" },
+  { q: "What is biometric authentication?", a: 1, opts: ["Authentication using a PIN number","Authentication using unique physical features such as face, voice, eyes or fingerprints","Authentication using a hardware token","Authentication using a one-time password"], explain: "Biometrics use the unique features of a user's face, voice, eyes or fingerprints to confirm their identity. Used in smartphones and passport control.", topic: "1.20 Protecting Data" },
+
+  // 1.21 Antivirus/Firewall/Encryption
+  { q: "What is the difference between antivirus software and a firewall?", a: 2, opts: ["They are the same thing","Antivirus protects against hardware faults; firewall protects against software","Antivirus scans for and removes malware; a firewall monitors and controls network traffic between device and internet","Firewalls detect viruses; antivirus software monitors networks"], explain: "Antivirus software searches for and prevents attempts to infect the system with viruses. A firewall monitors and controls network traffic between a device and the internet/external network.", topic: "1.21 Antivirus/Firewall" },
+  { q: "What does PGP stand for?", a: 0, opts: ["Pretty Good Privacy","Packet Gateway Protocol","Private General Protection","Public Gateway Protocol"], explain: "PGP = Pretty Good Privacy. Can be used to encrypt the contents of emails, making them unreadable to any unauthorised access without a private key.", topic: "1.21 Antivirus/Firewall" },
+  { q: "What is encryption?", a: 3, opts: ["Compressing files to reduce size","Backing up data to a remote server","Protecting a network using a firewall","Converting data into a meaningless code that can only be decrypted and understood with a key"], explain: "Encryption is the process of converting data into a meaningless code that can only be decrypted and understood with a key.", topic: "1.21 Antivirus/Firewall" },
+  { q: "What does end-to-end encryption mean?", a: 1, opts: ["Encryption from device to server only","Only the people at each end of the message are able to read it","Encryption that requires two keys","Encryption used only for backup files"], explain: "End-to-end encryption means only the people at each end of the message are able to read it. WhatsApp, Facebook Messenger and Signal use this by default.", topic: "1.21 Antivirus/Firewall" },
+
+  // 1.22-1.23 Online Services
+  { q: "What is transactional data?", a: 0, opts: ["Information generated every time an online transaction is made, including personal data, items, payments and dates","A type of database format","Data stored in transaction log files","Financial data only"], explain: "Transactional data is the information generated and recorded every time an online transaction is made, whether personal, business or financial.", topic: "1.22–1.23 Online Services" },
+  { q: "What is a MOOC?", a: 2, opts: ["Mobile Online Offline Connection","Media Operations and Output Channel","Massive Open Online Course","Multi-Origin Online Content"], explain: "MOOC = Massive Open Online Course. Brings education to anyone with internet access. Unfortunately can lead to unscrupulous training organisations issuing unregulated certificates.", topic: "1.22–1.23 Online Services" },
+  { q: "What are browser cookies used for?", a: 3, opts: ["Preventing viruses","Encrypting browsing data","Improving browser speed","Collecting browsing and buying patterns to target advertising and adjust promotions"], explain: "Cookies collect browsing and buying patterns through websites. Organisations adjust promotions to meet market demands and often sell this data to other organisations.", topic: "1.22–1.23 Online Services" },
+
+  // 1.24-1.26 Data Manipulation
+  { q: "What is primary data?", a: 1, opts: ["Data found in published research articles","Data that an individual or organisation has collected or generated themselves","Data that is the most accurate","The first data entry in a database"], explain: "Primary data is data that an individual or organisation has collected or generated themselves — e.g., results from an original questionnaire, interview, sensor data, or new customer list.", topic: "1.24–1.26 Data" },
+  { q: "What is verification?", a: 0, opts: ["Checking data with an original source to confirm a match or spot inaccuracy","Checking that data is within a set range","Removing duplicate data entries","Backing up data to a remote server"], explain: "Verification means checking the data with an original source to confirm a match or spot an inaccuracy. Systems may ask you to enter data twice or text an additional code.", topic: "1.24–1.26 Data" },
+  { q: "What is validation?", a: 3, opts: ["Physically checking printed records","Asking the user to re-enter data","Comparing data with a backup","A pre-programmed instruction to check that data makes sense and appears reasonable"], explain: "Validation uses a pre-programmed instruction (macro or parameters) to check that data makes sense and appears reasonable. It does NOT check for inaccuracies — just whether data fits the expected pattern.", topic: "1.24–1.26 Data" },
+  { q: "What is qualitative data?", a: 2, opts: ["Numerical data that can be measured","Data about quantities","Descriptive data in sentence form — opinions, views, feelings","Statistical data from surveys"], explain: "Qualitative data is descriptive — collected in sentence form (opinions, views, feelings). Quantitative data is numerical (measured on a scale or counted).", topic: "1.24–1.26 Data" },
+
+  // 1.27 Moral/Ethical
+  { q: "What is the 'digital divide'?", a: 1, opts: ["The difference between 2G and 4G networks","The increasing gap between those who have access to technology and those who do not","The distinction between hardware and software","The difference between digital and analogue signals"], explain: "The digital divide describes the increasing gap between those who have access to technology and those who do not. Unequal access means missing out on education, news, employment and cheaper products.", topic: "1.27 Moral/Ethical" },
+  { q: "What is e-waste?", a: 0, opts: ["Discarded computer hardware and printer cartridges that can produce carcinogens and leak chemicals into the ground","Electronic data that has been deleted","Wasted bandwidth on a network","Unused storage space on devices"], explain: "E-waste = electronic waste including computer hardware and printer cartridges. When placed in landfill they may produce carcinogens and leak chemicals into the ground. E-waste is increasing 3x faster than the world's population.", topic: "1.27 Moral/Ethical" },
+  { q: "What is 'netiquette'?", a: 3, opts: ["Network security protocol","Internet service etiquette for businesses only","A type of internet encryption","Basic rules of online behaviour and etiquette — e.g. no abusive language, not sharing others' content without permission"], explain: "Netiquette refers to basic rules of online behaviour. These include: never use abusive language, do not harass, never say online what you wouldn't say in person, always be aware of the whole group.", topic: "1.27 Moral/Ethical" },
+
+  // 1.28-1.29 Legal
+  { q: "What is the maximum prison sentence under the Computer Misuse Act for intentionally modifying/damaging a computer system?", a: 2, opts: ["2 years","5 years","10 years","Life imprisonment"], explain: "Intentional modification including damage of a computer system is punishable by up to 10 years in prison and a large fine under the Computer Misuse Act 1990.", topic: "1.28–1.29 Legal" },
+  { q: "What does the Data Protection Act 2018 (GDPR) require businesses to do?", a: 0, opts: ["Follow strict data protection principles; notify ICO about CCTV use; fines up to £17.5m or 4% of global annual turnover for breaches","Only encrypt sensitive files","Use cloud storage for all personal data","Provide annual training for all employees on data use"], explain: "The Data Protection Act 2018 (GDPR) requires everyone responsible for using personal data to follow strict rules. Businesses must notify the ICO about CCTV use. Serious breaches result in fines up to £17.5m or 4% of annual global turnover.", topic: "1.28–1.29 Legal" },
+  { q: "What does the Health and Safety (DSE) Regulations 1992 stand for?", a: 1, opts: ["Dynamic Software Environment","Display Screen Equipment","Digital Screen Engineering","Data Storage Equipment"], explain: "DSE = Display Screen Equipment. The 1992 regulations set out rules for using any device with an alphanumeric or graphic display screen, particularly to prevent Repetitive Strain Injury (RSI).", topic: "1.28–1.29 Legal" },
+  { q: "What is the Copyright, Designs and Patents Act 1988 designed to do?", a: 3, opts: ["Regulate internet use","Protect personal data","Define software licensing models","Ensure creators of original material have the right to control how their work is used"], explain: "The Copyright, Designs and Patents Act 1988 ensures that individuals and organisations that create original material have the right to control how their work is used. It covers broadcasting, artwork, music, film, video games and databases.", topic: "1.28–1.29 Legal" },
+  { q: "What does a DoS attack do?", a: 2, opts: ["Deletes operating system files","Encrypts a company's data for ransom","Overwhelms a server with traffic to deny service to legitimate users","Intercepts emails between two parties"], explain: "A Denial of Service (DoS) attack overwhelms a server/system with traffic to deny service to legitimate users. Covered by the Police and Justice Act 2006 (Computer Misuse amendment).", topic: "1.28–1.29 Legal" },
+  { q: "What does RSI stand for in the context of workplace health?", a: 0, opts: ["Repetitive Strain Injury","Remote System Interface","Regulated Software Installation","Real-time Security Inspection"], explain: "RSI = Repetitive Strain Injury. The Health and Safety (DSE) Regulations 1992 exist to prevent RSI and other health impacts from long-term use of display screen equipment.", topic: "1.28–1.29 Legal" },
+
+  // More mixed questions
+  { q: "What is a 'server farm'?", a: 1, opts: ["A shared server rack in an office","A large facility with the original and backup systems at different sites to prevent simultaneous damage","An agricultural data management system","A cloud computing model"], explain: "A server farm prevents simultaneous damage to original and backup systems by keeping them at separate sites.", topic: "1.20 Protecting Data" },
+  { q: "What is PaaS?", a: 3, opts: ["Personal as a Service","Primary Application Software","Platform Access System","Platform as a Service — provides users with a complete service for running, developing and testing applications in the cloud"], explain: "PaaS = Platform as a Service. Provides users with a complete service including platform, hardware, software and infrastructure for developing, running and testing applications.", topic: "1.15 Cloud Computing" },
+  { q: "What does a digital certificate verify?", a: 2, opts: ["File encryption strength","Wireless network speed","The identity of an individual or organisation","Payment transaction amounts"], explain: "Digital certificates are unique codes assigned by an official provider to verify the identity of an individual or organisation. Used for online banking. Also called a public key certificate.", topic: "1.20 Protecting Data" },
+  { q: "What does an eye-tracking assistive technology do?", a: 0, opts: ["Tracks a user's eye movements and translates them to control actions on a computer screen","Records what a user is looking at for advertising purposes","Monitors eye strain from screen use","Adjusts screen brightness based on eye health"], explain: "Eye-tracking software works by tracking a user's eye movements and translating those movements onto a computer screen to undertake actions. Also available in wearable items such as glasses.", topic: "1.4 Peripherals" },
+  { q: "What is the main advantage of IMAP over POP3?", a: 3, opts: ["IMAP is faster","IMAP is free to use","IMAP encrypts emails","Messages via IMAP are synchronised between the server and client, so accessible on multiple devices"], explain: "The key advantage of IMAP over POP3 is that messages are synchronised between the server and client, meaning they can be accessed on multiple devices. POP3 removes the message from the server after download.", topic: "1.14 Data Transmission" },
+];
+
+// Flashcards
+const flashcards = [
+  { term: "MFD", def: "Multifunctional Device — also known as AIO (All-In-One). Printers that also scan, photocopy, email and connect wirelessly.", topic: "1.1" },
+  { term: "IoT", def: "Internet of Things — the collective group of devices that connect to each other and exchange data over networks including the internet.", topic: "1.1" },
+  { term: "Fibre optic cable", def: "Transmits data using pulses of LIGHT across vast distances. Used to deliver superfast broadband.", topic: "1.1" },
+  { term: "RFID", def: "Radio Frequency Identification — tags automatically scan and track stock from factory to store.", topic: "1.2" },
+  { term: "NFC", def: "Near Field Communication — used for contactless payments by tapping a mobile phone or smartwatch.", topic: "1.2" },
+  { term: "CAD", def: "Computer-Aided Design — software for creating technical drawings in architecture, textiles and furniture.", topic: "1.2" },
+  { term: "CAM", def: "Computer-Aided Manufacturing — CNC machines mill, turn, mould and cut materials for mass production.", topic: "1.2" },
+  { term: "EFTPOS", def: "Electronic Funds Transfer at Point of Sale — systems for credit/debit card transactions and ATMs.", topic: "1.2" },
+  { term: "Data Flow Diagram (DFD)", def: "Uses specific shapes: Oval = person/entity, Numbered rectangle = process, D1/D2 box = database, Arrows = data flow.", topic: "1.3" },
+  { term: "Flowchart — Diamond", def: "Decision symbol in a flowchart — leads to Yes or No branches.", topic: "1.3" },
+  { term: "Flowchart — Parallelogram", def: "Input/Output symbol in a flowchart.", topic: "1.3" },
+  { term: "Screen reader", def: "Assistive technology that reads aloud the words or content on a computer screen. Examples: JAWS, Dolphin's Supernova.", topic: "1.4" },
+  { term: "TTS (Text-to-Speech)", def: "Voice recognition software that allows users to give instructions by voice rather than keyboard. Examples: Siri, Alexa, Cortana.", topic: "1.4" },
+  { term: "SSD (Solid State Drive)", def: "Flash memory storage — much faster than HDDs. Used in laptops, tablets and USB flash drives.", topic: "1.5" },
+  { term: "Full backup vs Incremental backup", def: "Full backup = all system files, apps and documents. Incremental = only files changed since last backup (quicker).", topic: "1.5" },
+  { term: "Real-time OS", def: "Processes data in current real time — critical for air traffic control, stock markets, medical scanners.", topic: "1.6" },
+  { term: "Distributed OS", def: "Processes run on multiple interconnected computers acting as one system. E.g. social networks, online gaming.", topic: "1.6" },
+  { term: "Open Source software", def: "Free to use, edit, give away for any purpose. Examples: LibreOffice, Linux, Firefox.", topic: "1.7" },
+  { term: "Proprietary software", def: "Privately owned — users pay for a licence or subscribe. Cannot edit or share. Examples: Windows, MS Office.", topic: "1.7" },
+  { term: "Lossy compression", def: "Removes data permanently to compress the file — results in loss of quality. Used in JPEG, MP3.", topic: "1.7" },
+  { term: "Lossless compression", def: "Reduces file size without losing data — original quality maintained. Used in FLAC, GIF, TIFF.", topic: "1.7" },
+  { term: "Haptic technology", def: "Touchscreen GUI used on smartphones, tablets and games consoles.", topic: "1.7" },
+  { term: "TCO (Total Cost of Ownership)", def: "The full cost of owning IT systems including maintenance, upgrades, replacement — not just purchase price.", topic: "1.8–1.9" },
+  { term: "Downtime", def: "Period when digital devices, internet or networks are out of action. Costs businesses money.", topic: "1.8–1.9" },
+  { term: "VOIP", def: "Voice Over Internet Protocol — routes calls over IP network rather than landline. Protocols: RTP, SIP.", topic: "1.11" },
+  { term: "Star topology", def: "Network topology where all devices connect to a central hub/router. Most common topology.", topic: "1.13" },
+  { term: "LAN", def: "Local Area Network — network within a small area/building. Organisation owns the links (cabling).", topic: "1.13" },
+  { term: "WAN", def: "Wide Area Network — connects multiple LANs. The internet is the world's largest WAN.", topic: "1.13" },
+  { term: "VPN", def: "Virtual Private Network — secure private connection that hides IP address over public networks.", topic: "1.13" },
+  { term: "SMTP", def: "Simple Mail Transfer Protocol — used to SEND emails from client to server and to recipient.", topic: "1.14" },
+  { term: "POP3", def: "Post Office Protocol 3 — retrieves email from server. Does NOT leave a copy on the server.", topic: "1.14" },
+  { term: "IMAP", def: "Internet Message Access Protocol — synchronises messages between server and client; accessible on multiple devices.", topic: "1.14" },
+  { term: "HTTPS", def: "Secure version of HTTP using SSL/TLS encryption. Used for banking, shopping, personal profiles.", topic: "1.14" },
+  { term: "Bandwidth", def: "Data-carrying capacity of a network, measured in bits per second (bps) or megabits per second (Mbps).", topic: "1.14" },
+  { term: "Latency", def: "Time taken for data to travel from one point to another.", topic: "1.14" },
+  { term: "Codec", def: "Hardware or software that encodes and decodes data — results in compression and smaller files. H.264 is common for video.", topic: "1.14" },
+  { term: "SaaS", def: "Software as a Service — software solutions on subscription. E.g. Microsoft 365, Google Workspace.", topic: "1.15" },
+  { term: "IaaS", def: "Infrastructure as a Service — rent servers, storage and networks on demand. Pay for what you use.", topic: "1.15" },
+  { term: "PaaS", def: "Platform as a Service — complete service for running, developing and testing applications in the cloud.", topic: "1.15" },
+  { term: "Private cloud", def: "Cloud for sole use by one organisation — customisable, secure. Only company staff have access.", topic: "1.15" },
+  { term: "Hybrid cloud", def: "Combines public and private cloud — scalable but raises security concerns.", topic: "1.15" },
+  { term: "Malware", def: "Malicious software designed to harm an IT system. A virus is a form of malware.", topic: "1.19" },
+  { term: "Social engineering", def: "Psychological manipulation of people into performing actions or divulging confidential information.", topic: "1.19" },
+  { term: "Phishing", def: "Fake messages or emails designed to trick users into revealing personal data or bank details.", topic: "1.19" },
+  { term: "MFA (Multi-Factor Authentication)", def: "Adds an extra security layer — a code sent to a device only the user should have (e.g., SMS code).", topic: "1.20" },
+  { term: "Biometrics", def: "Authentication using unique physical features — face, voice, eyes or fingerprints.", topic: "1.20" },
+  { term: "Encryption", def: "Converting data into a meaningless code only decryptable with a key. Public key encrypts; private key decrypts.", topic: "1.21" },
+  { term: "PGP (Pretty Good Privacy)", def: "Encrypts email contents — making them unreadable without a private key.", topic: "1.21" },
+  { term: "End-to-end encryption", def: "Only the people at each end of the message can read it. Used in WhatsApp, Signal, Facebook Messenger.", topic: "1.21" },
+  { term: "Firewall", def: "Monitors and controls network traffic between device and internet. Can be hardware or software-based.", topic: "1.21" },
+  { term: "Transactional data", def: "Information generated every time an online transaction is made — personal data, items, payments, dates.", topic: "1.22–1.23" },
+  { term: "MOOC", def: "Massive Open Online Course — brings education to anyone with internet access.", topic: "1.22–1.23" },
+  { term: "Primary data", def: "Data collected or generated by the individual/organisation themselves — surveys, interviews, sensor data.", topic: "1.24–1.26" },
+  { term: "Secondary data", def: "Data collected by someone else — research articles, government reports, newspaper reports.", topic: "1.24–1.26" },
+  { term: "Verification", def: "Checking data with an original source to confirm a match or spot inaccuracy.", topic: "1.24–1.26" },
+  { term: "Validation", def: "Pre-programmed instruction to check data makes sense and appears reasonable (e.g., age range, postcode format).", topic: "1.24–1.26" },
+  { term: "Qualitative data", def: "Descriptive data in sentence form — opinions, views, feelings.", topic: "1.24–1.26" },
+  { term: "Quantitative data", def: "Numerical data that can be measured or counted — on a scale or as statistics.", topic: "1.24–1.26" },
+  { term: "Digital divide", def: "The increasing gap between those who have access to technology and those who do not.", topic: "1.27" },
+  { term: "E-waste", def: "Discarded electronic hardware — can produce carcinogens and leak chemicals in landfill. Growing 3x faster than world population.", topic: "1.27" },
+  { term: "Netiquette", def: "Basic rules of online behaviour — no abusive language, no harassment, don't share others' content without permission.", topic: "1.27" },
+  { term: "AUP (Acceptable Use Policy)", def: "States protocols for what is deemed morally and ethically acceptable when using IT systems.", topic: "1.27" },
+  { term: "Computer Misuse Act 1990", def: "Prohibits unauthorised access to data. Offences carry up to 2, 5 or 10 years imprisonment depending on severity.", topic: "1.28–1.29" },
+  { term: "GDPR / Data Protection Act 2018", def: "Everyone responsible for personal data must follow strict rules. Fines up to £17.5m or 4% of annual global turnover.", topic: "1.28–1.29" },
+  { term: "DSE Regulations 1992", def: "Health and Safety (Display Screen Equipment) — rules for using screen devices. Prevents RSI. Employers must provide ergonomic equipment.", topic: "1.28–1.29" },
+  { term: "RSI (Repetitive Strain Injury)", def: "Physical injury from repeated use of display screen equipment. Prevented by breaks, ergonomic equipment and training.", topic: "1.28–1.29" },
+  { term: "Copyright, Designs and Patents Act 1988", def: "Creators of original material have the right to control how it is used — covers broadcasting, artwork, music, film, databases.", topic: "1.28–1.29" },
+  { term: "DoS attack", def: "Denial of Service attack — overwhelms a server with traffic to deny service to legitimate users.", topic: "1.28–1.29" },
+  { term: "ICO", def: "Information Commissioner's Office — businesses must notify the ICO about CCTV use under data protection law.", topic: "1.28–1.29" },
+];
+
+// Exam Questions
+const examQuestions = {
+  short: [
+    { q: "State three types of network topology.", marks: 3, answer: "Star (most common — all devices connect to a central hub/router), Ring (devices form a data loop), Bus/Line (devices connect in a line with terminators at each end)." },
+    { q: "State two differences between a LAN and a WAN.", marks: 2, answer: "A LAN covers a small area (e.g., building) and the organisation owns the links (e.g., cabling). A WAN covers a wider area and connects multiple LANs — the internet is the world's largest WAN." },
+    { q: "State one key difference between open source and proprietary software.", marks: 1, answer: "Open source software is free to use, edit and give away for any purpose, while proprietary software requires users to pay for a licence or subscribe and cannot be edited or shared." },
+    { q: "State what SMTP stands for and state its purpose.", marks: 2, answer: "SMTP = Simple Mail Transfer Protocol. It is used for SENDING emails — it transmits mail from an email client to a mail server and on to the recipient." },
+    { q: "State two characteristics of storage media.", marks: 2, answer: "Any two from: Capacity (amount of data stored), Cost (cost per gigabyte), Speed (how quickly data is read/written), Compatibility (connectivity with other devices e.g. USB type)." },
+    { q: "Define bandwidth.", marks: 1, answer: "Bandwidth is the data-carrying capacity of a network connection, measured in bits per second (bps) or megabits per second (Mbps)." },
+    { q: "State two types of backup and describe one difference between them.", marks: 3, answer: "Full backup: includes ALL system files, applications and documents. Incremental backup: only includes files changed since the previous backup. Incremental backups are quicker to perform and should be done more often." },
+    { q: "State what RFID stands for and describe how it is used in retail.", marks: 2, answer: "RFID = Radio Frequency Identification. RFID tags are used to automatically scan and track stock from factory to store. Barcodes update shop stock records and automated systems order stock from suppliers." },
+    { q: "State three types of operating system.", marks: 3, answer: "Any three from: Batch, Distributed, Multitasking, Network OS, Real-time OS, Mobile OS, Single-user, Multi-user." },
+    { q: "State what HTTPS stands for and describe how it differs from HTTP.", marks: 2, answer: "HTTPS = HyperText Transfer Protocol Secure. HTTPS is a secure version of HTTP using SSL or TLS encryption. It is used for websites requiring security such as online banking, personal profiles and shopping." },
+  ],
+  long: [
+    { q: "Discuss the implications of using cloud computing for a large organisation.", marks: 9, answer: "Cloud computing benefits: flexible online access to data/applications, reduced local storage costs, enables remote working, scalable to meet demand, pay-as-you-go models available.\n\nConcerns: potential data loss and security breaches (hacking/interception), need policies on professional use only, contingency plans for downtime (especially for remote workers), consideration of UK data protection laws (GDPR), in-house IT support may be reduced requiring staff training, need to balance cloud cost against local infrastructure.\n\nConclusion: Cloud computing offers significant productivity and cost benefits but requires careful consideration of security, data protection legislation and the impact on productivity during downtime." },
+    { q: "Evaluate the use of open source software compared to proprietary software for a small business.", marks: 8, answer: "Open source advantages: free to download and use, lots of different software to try, can be changed and customised to meet specific needs.\n\nOpen source disadvantages: may not be supported if something goes wrong, help is harder to find and may be difficult to use, might not work as described by the creator, may look and work differently from other familiar software.\n\nProprietary advantages: problems are normally quickly resolved, software is regularly updated, new features regularly added, familiar to many users.\n\nProprietary disadvantages: one-off cost or subscription required, software cannot be customised or edited, users cannot share with others.\n\nConclusion: For a small business, the financial savings from open source may be attractive but the lack of support and reliability concerns may outweigh cost savings. Proprietary software provides reliability and ongoing support at a cost which may be justified by productivity gains." },
+    { q: "Discuss the moral and ethical implications of the use of information technology.", marks: 8, answer: "Privacy concerns: users share personal information with IT systems — risk of onlookers, photos posted without permission, UK Online Safety Act 2023 addresses digitally manipulated images.\n\nEnvironmental impact: e-waste (electronic hardware/printer cartridges) produces carcinogens in landfill — WHO reports e-waste growing 3x faster than world population. However, technology also enables remote working, reducing carbon footprint from commuting.\n\nDigital divide: gap between those who have access and those who do not — impacts education, employment, health services access. WHO: only 3% of low-income country populations have access to assistive technology.\n\nOnline behaviour: netiquette rules exist but not always followed — abusive language, harassment, sharing others' content. Organisations implement AUPs to govern acceptable use.\n\nConclusion: IT has created significant ethical challenges around privacy, environmental impact and equality of access. Organisations must implement clear policies and individuals must take personal responsibility for ethical online behaviour." },
+    { q: "Evaluate the use of online services for individuals and organisations.", marks: 9, answer: "Benefits for individuals: 24/7 access to retail, banking, education, news, entertainment. Flexible and convenient. MOOC courses bring education globally. Booking systems simplify travel and events.\n\nRisks for individuals: products may be unregulated, pirated or unlicensed. Financial services may not be authentic. Rise of 'fake news' from unregulated sources. Online gambling risk. Personal data collected via cookies — sold to third parties. Phishing and fraudulent charity requests.\n\nBenefits for organisations: advertising revenue from user data. Targeted marketing using transactional data and loyalty cards. Online booking reduces staffing costs. Collaborative working enables geographically distributed teams.\n\nRisks for organisations: GDPR obligations regarding data collection and use. Security risks from data breaches. Customer trust can be lost if data is mishandled.\n\nConclusion: Online services offer enormous opportunities but carry significant risks. Both individuals and organisations must be aware of the legal and security implications, and individuals must exercise caution about sharing personal data." },
+  ],
+  mock: [
+    { q: "A school is considering moving from a local network to cloud-based storage for student files. Identify two potential benefits to the school of using cloud-based storage.", marks: 2, answer: "Any two: Students/staff can access files from anywhere with internet access; Reduces need for local server storage hardware; Supports remote working; Files accessible on multiple devices; Scalable to meet increasing storage needs; Built-in backup/recovery options." },
+    { q: "Explain two potential security risks of using cloud-based storage for a school.", marks: 4, answer: "Two risks, each explained: 1) Data interception — files stored/transferred online may be hacked or intercepted if security measures are insufficient; schools store sensitive data (personal records, grades) which could be exposed. 2) Downtime — cloud service outages prevent access to files during critical periods (e.g., exams, lessons) which disrupts learning and productivity. Schools need contingency plans." },
+    { q: "A business suffers a cyber attack where a member of staff receives an email asking them to click a link and enter their login credentials. Identify the type of threat and explain how it could have been prevented.", marks: 4, answer: "Type of threat: Social engineering / Phishing (1 mark). Prevention: Staff training to identify phishing emails (checking sender address, avoiding clicking suspicious links) (1 mark); Use of multi-factor authentication so even if credentials are stolen, access is prevented (1 mark); Email filters and antivirus software to flag suspicious emails before they reach staff (1 mark)." },
+    { q: "Describe what is meant by validation and give one example of how it could be used in a data entry form.", marks: 3, answer: "Validation is a pre-programmed instruction (macro or set of parameters) designed to check that data makes sense and appears reasonable (1 mark). It does not check if the data is correct — only if it fits the expected pattern (1 mark). Example: An age field that only accepts numbers between 18 and 65 would reject an entry of 150 or a letter (1 mark)." },
+    { q: "Explain what the GDPR requires of organisations that store personal data.", marks: 4, answer: "The GDPR (Data Protection Act 2018) requires everyone responsible for using personal data to follow strict data protection principles (1 mark). Organisations must disclose how they use personal data, e.g., must notify the ICO about CCTV use (1 mark). Copying someone's data without permission is against the law (1 mark). Serious breaches can result in fines of up to £17.5m or 4% of annual global turnover (1 mark)." },
+    { q: "A large supermarket uses RFID technology. Explain two benefits of using RFID in stock control.", marks: 4, answer: "Two benefits each explained: 1) RFID tags automatically scan and track stock from factory to store — this reduces manual labour and errors, making stock management more efficient and accurate (2 marks). 2) Barcodes and RFID update shop stock records automatically, enabling automated systems to order stock from suppliers when levels fall below a threshold — reducing the risk of running out of stock (2 marks)." },
+    { q: "Evaluate the use of collecting online donations for a charity. You should consider the benefits and drawbacks.", marks: 9, answer: "Benefits: 24/7 availability — donors can give at any time from anywhere; lower processing costs than cheque/cash; instant transfer of funds; wider reach — donors from around the world; automated receipt sending; data collection for donor management; social media integration for viral campaigns.\n\nDrawbacks: Security risk — phishing emails and fraudulent donation websites; personal financial data at risk from hacking; some donors (especially elderly) may not have internet access or trust online payments; technical issues could prevent donations during campaigns; GDPR obligations when storing donor data; payment processing fees reduce amount received; risk of fraudulent donations being reversed.\n\nConclusion: Online donations offer significant advantages in reach, cost and convenience, but charities must invest in secure, trustworthy payment systems and be aware of data protection obligations. The benefits generally outweigh the drawbacks for most modern charities, especially those with a national/international profile." },
+  ]
+};
+
+// =====================================================
+// STATE
+// =====================================================
+let currentQuestions = [];
+let currentQIndex = 0;
+let score = 0;
+let wrongAnswers = [];
+let quizAnswered = false;
+let currentQuizTopic = 'all';
+let currentQuizLen = 20;
+
+let fcIndex = 0;
+let fcFlipped = false;
+let fcCards = [...flashcards];
+let fcTopicFilter = 'all';
+
+let examMode = '';
+let examQIndex = 0;
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+function showView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// =====================================================
+// NOTES
+// =====================================================
+function buildTopicsGrid() {
+  const grid = document.getElementById('topics-grid');
+  grid.innerHTML = topics.map(t => `
+    <div class="topic-card" onclick="showTopic(${t.id})">
+      <div class="topic-num">${t.num}</div>
+      <div class="topic-title">${t.title}</div>
+      <div class="topic-pills">${t.pills.map(p => `<span class="pill">${p}</span>`).join('')}</div>
+      <div class="topic-mastery"><div class="topic-mastery-fill" style="width:${Math.random()*30}%;background:var(--accent3)"></div></div>
+    </div>
+  `).join('');
+}
+
+function showTopic(id) {
+  const t = topics.find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('notes-home').style.display = 'none';
+  document.getElementById('notes-detail').style.display = 'block';
+
+  let html = `
+    <div class="topic-header">
+      <h1>${t.title}</h1>
+      <span class="session-tag">Session ${t.num}</span>
+    </div>
+  `;
+
+  t.sections.forEach(s => {
+    html += `<div class="content-section"><h2>${s.heading}</h2>`;
+    if (s.content) html += `<p>${s.content}</p>`;
+    if (s.body) {
+      html += `<table class="data-table"><thead><tr><th>Term / Type</th><th>Description</th></tr></thead><tbody>`;
+      s.body.forEach(r => { html += `<tr><td><strong>${r.t}</strong></td><td>${r.d}</td></tr>`; });
+      html += `</tbody></table>`;
+    }
+    if (s.tip) html += `<div class="tip-box"><strong>💡 Tip:</strong> ${s.tip}</div>`;
+    html += `</div>`;
+  });
+
+  // Quick quiz button
+  html += `<div style="margin-top:20px;"><button class="btn btn-primary" onclick="startQuizForTopic('${t.num}')">🧠 Quiz me on ${t.num}</button></div>`;
+
+  document.getElementById('notes-content').innerHTML = html;
+}
+
+function startQuizForTopic(num) {
+  showViewById('quiz');
+  document.querySelectorAll('.nav-tab').forEach((el, i) => { if(i===2) el.classList.add('active'); else el.classList.remove('active'); });
+  startQuiz(num, 10);
+}
+
+function showViewById(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+}
+
+function showNotesHome() {
+  document.getElementById('notes-home').style.display = 'block';
+  document.getElementById('notes-detail').style.display = 'none';
+}
+
+// =====================================================
+// FLASHCARDS
+// =====================================================
+function buildFCTopicBtns() {
+  const topics_unique = ['all', ...new Set(flashcards.map(f => f.topic))];
+  const container = document.getElementById('fc-section-btns');
+  container.innerHTML = topics_unique.map(t => `
+    <button class="btn btn-secondary" style="padding:5px 12px;font-size:12px;" onclick="setFCTopic('${t}',this)">${t === 'all' ? '📚 All' : t}</button>
+  `).join('');
+}
+
+function setFCTopic(topic, btn) {
+  fcTopicFilter = topic;
+  fcCards = topic === 'all' ? [...flashcards] : flashcards.filter(f => f.topic === topic);
+  fcIndex = 0;
+  fcFlipped = false;
+  updateFlashcard();
+  document.querySelectorAll('#fc-section-btns button').forEach(b => b.classList.remove('btn-primary'));
+  btn.classList.add('btn-primary');
+}
+
+function updateFlashcard() {
+  const card = fcCards[fcIndex];
+  const el = document.getElementById('flashcard');
+  el.classList.remove('flipped');
+  document.getElementById('fc-side').textContent = 'TERM';
+  document.getElementById('fc-text').textContent = card ? card.term : 'No cards';
+  document.getElementById('fc-hint').textContent = 'Click to reveal definition';
+  document.getElementById('fc-progress').textContent = `Card ${fcIndex + 1} of ${fcCards.length}`;
+  fcFlipped = false;
+}
+
+function flipCard() {
+  const card = fcCards[fcIndex];
+  const el = document.getElementById('flashcard');
+  if (!fcFlipped) {
+    el.classList.add('flipped');
+    document.getElementById('fc-side').textContent = 'DEFINITION';
+    document.getElementById('fc-text').textContent = card.def;
+    document.getElementById('fc-hint').textContent = 'Click to go back to term';
+    fcFlipped = true;
+  } else {
+    updateFlashcard();
+  }
+}
+
+function nextCard() {
+  fcIndex = (fcIndex + 1) % fcCards.length;
+  updateFlashcard();
+}
+
+function prevCard() {
+  fcIndex = (fcIndex - 1 + fcCards.length) % fcCards.length;
+  updateFlashcard();
+}
+
+function shuffleCards() {
+  fcCards = fcCards.sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  updateFlashcard();
+}
+
+// =====================================================
+// QUIZ
+// =====================================================
+function buildQuizTopicSelector() {
+  const container = document.getElementById('quiz-topic-selector');
+  const topicNums = ['all', ...new Set(allQuestions.map(q => q.topic))];
+  container.innerHTML = topicNums.map(t => `
+    <div class="quiz-sel-card ${t === 'all' ? 'active-sel' : ''}" onclick="selectQuizTopic('${t}', this)">
+      <div class="qs-icon">${t === 'all' ? '📚' : '📖'}</div>
+      <div class="qs-label">${t === 'all' ? 'All Topics' : t}</div>
+      <div class="qs-count">${t === 'all' ? allQuestions.length : allQuestions.filter(q => q.topic === t).length} questions</div>
+    </div>
+  `).join('');
+}
+
+function selectQuizTopic(topic, el) {
+  currentQuizTopic = topic;
+  document.querySelectorAll('.quiz-sel-card').forEach(c => c.classList.remove('active-sel'));
+  el.classList.add('active-sel');
+}
+
+function startQuiz(topic, len) {
+  currentQuizTopic = topic;
+  currentQuizLen = len;
+  let pool = topic === 'all' ? [...allQuestions] : allQuestions.filter(q => q.topic === topic || q.topic.startsWith(topic));
+  if (pool.length === 0) pool = [...allQuestions];
+  currentQuestions = pool.sort(() => Math.random() - 0.5).slice(0, Math.min(len, pool.length));
+  currentQIndex = 0;
+  score = 0;
+  wrongAnswers = [];
+
+  document.getElementById('quiz-home').style.display = 'none';
+  document.getElementById('quiz-active').style.display = 'block';
+  document.getElementById('quiz-results').style.display = 'none';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if (currentQIndex >= currentQuestions.length) { showResults(); return; }
+  const q = currentQuestions[currentQIndex];
+  quizAnswered = false;
+  document.getElementById('q-counter').textContent = `Q ${currentQIndex + 1} / ${currentQuestions.length}`;
+  document.getElementById('q-topic-tag').textContent = q.topic;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-feedback').style.display = 'none';
+  document.getElementById('q-next-btn').style.display = 'none';
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML = q.opts.map((o, i) => `
+    <button class="quiz-option" onclick="selectAnswer(${i})">${o}</button>
+  `).join('');
+}
+
+function selectAnswer(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = currentQuestions[currentQIndex];
+  const opts = document.querySelectorAll('.quiz-option');
+
+  opts.forEach(o => { o.classList.add('disabled'); o.onclick = null; });
+  opts[idx].classList.add(idx === q.a ? 'correct' : 'wrong');
+  if (idx !== q.a) opts[q.a].classList.add('reveal-correct');
+
+  const fb = document.getElementById('q-feedback');
+  fb.style.display = 'block';
+  if (idx === q.a) {
+    score++;
+    fb.className = 'quiz-feedback correct';
+    document.getElementById('q-feedback-text').textContent = '✅ Correct!';
+  } else {
+    fb.className = 'quiz-feedback wrong';
+    document.getElementById('q-feedback-text').textContent = `❌ Incorrect. The correct answer was: "${q.opts[q.a]}"`;
+    wrongAnswers.push(q);
+  }
+  document.getElementById('q-explain').textContent = q.explain;
+
+  const topicId = topics.find(t => q.topic.startsWith(t.num));
+  const learnLink = document.getElementById('q-learn-link');
+  if (topicId) {
+    learnLink.onclick = () => { showNotesHome(); showTopic(topicId.id); showViewById('notes'); };
+    learnLink.style.display = 'inline';
+  } else {
+    learnLink.style.display = 'none';
+  }
+
+  document.getElementById('q-next-btn').style.display = 'inline-block';
+  updateProgress();
+}
+
+function nextQuestion() {
+  currentQIndex++;
+  loadQuestion();
+}
+
+function showResults() {
+  document.getElementById('quiz-active').style.display = 'none';
+  document.getElementById('quiz-results').style.display = 'block';
+
+  const pct = Math.round((score / currentQuestions.length) * 100);
+  const el = document.getElementById('res-score');
+  el.textContent = pct + '%';
+  el.className = 'results-score ' + (pct >= 75 ? 'great' : pct >= 50 ? 'ok' : 'poor');
+  document.getElementById('res-correct').textContent = score;
+  document.getElementById('res-wrong').textContent = currentQuestions.length - score;
+  document.getElementById('res-total').textContent = currentQuestions.length;
+
+  const lbl = document.getElementById('res-label');
+  if (pct >= 90) lbl.textContent = '🔥 Outstanding! You\'re exam-ready.';
+  else if (pct >= 75) lbl.textContent = '✅ Great work! A few areas to review.';
+  else if (pct >= 50) lbl.textContent = '⚠️ Getting there — keep revising!';
+  else lbl.textContent = '❌ Don\'t panic — go back to the notes and try again.';
+
+  const weakEl = document.getElementById('res-weak-areas');
+  if (wrongAnswers.length > 0) {
+    const weakTopics = [...new Set(wrongAnswers.map(q => q.topic))];
+    weakEl.innerHTML = `<div style="font-size:13px;color:var(--muted);margin-bottom:8px;">📌 Review these topics:</div>` +
+      weakTopics.map(t => `<span class="pill" style="margin:3px;display:inline-block;">${t}</span>`).join('');
+  } else {
+    weakEl.innerHTML = `<div style="color:var(--accent3);font-size:14px;">💯 Perfect score! Incredible.</div>`;
+  }
+}
+
+function endQuiz() {
+  document.getElementById('quiz-active').style.display = 'none';
+  showQuizHome();
+}
+
+function showQuizHome() {
+  document.getElementById('quiz-home').style.display = 'block';
+  document.getElementById('quiz-active').style.display = 'none';
+  document.getElementById('quiz-results').style.display = 'none';
+}
+
+// =====================================================
+// EXAM
+// =====================================================
+let timerInterval;
+let timeLeft;
+
+function startExam(mode) {
+  examMode = mode;
+  examQIndex = 0;
+  document.getElementById('exam-home').style.display = 'none';
+  document.getElementById('exam-active').style.display = 'block';
+  const container = document.getElementById('exam-active');
+
+  if (mode === 'mock') {
+    timeLeft = 30 * 60; // 30 minutes
+    let questions = [...examQuestions.mock];
+    renderExamQuestions(container, questions, true);
+    startTimer();
+  } else {
+    const qs = examQuestions[mode === 'short' ? 'short' : 'long'];
+    renderExamQuestions(container, qs, false);
+  }
+}
+
+function renderExamQuestions(container, qs, timed) {
+  let html = '';
+
+  if (timed) {
+    html += `
+      <div class="timer-display" id="timer-display">30:00</div>
+      <div class="exam-banner">⏱️ Timed Mock — ${timed ? '30 minutes' : 'No time limit'}. Write your answers below each question, then click "Reveal Mark Scheme".</div>
+    `;
+  } else {
+    html += `<div class="exam-banner">📝 Write your answer in the text box, then click "Reveal Mark Scheme" to check.</div>`;
+  }
+
+  html += `<div class="exam-card">`;
+  qs.forEach((q, i) => {
+    html += `
+      <div class="exam-q">
+        <div class="exam-q-num">Question ${i + 1}</div>
+        <div class="exam-q-text">${q.q}</div>
+        <div class="exam-q-marks">[${q.marks} mark${q.marks !== 1 ? 's' : ''}]</div>
+        <textarea class="exam-textarea" id="exam-ans-${i}" placeholder="Write your answer here..."></textarea>
+        <div style="margin-top:8px;">
+          <button class="btn btn-secondary" style="font-size:12px;" onclick="revealAnswer(${i})">👁️ Reveal Mark Scheme</button>
+        </div>
+        <div class="exam-answer-reveal" id="exam-reveal-${i}">
+          <strong>Mark Scheme:</strong><br>${q.answer.replace(/\n/g, '<br>')}
+        </div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+  html += `<div style="text-align:center;margin-top:20px;"><button class="btn btn-secondary" onclick="endExam()">← Back to Exam Home</button></div>`;
+  container.innerHTML = html;
+}
+
+function revealAnswer(i) {
+  const el = document.getElementById(`exam-reveal-${i}`);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const el = document.getElementById('timer-display');
+    if (!el) { clearInterval(timerInterval); return; }
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    el.textContent = `${m}:${s}`;
+    el.className = 'timer-display' + (timeLeft <= 60 ? ' danger' : timeLeft <= 300 ? ' warning' : '');
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      el.textContent = '⏰ TIME UP!';
+    }
+  }, 1000);
+}
+
+function endExam() {
+  clearInterval(timerInterval);
+  document.getElementById('exam-home').style.display = 'block';
+  document.getElementById('exam-active').style.display = 'none';
+  document.getElementById('exam-active').innerHTML = '';
+}
+
+// =====================================================
+// PROGRESS
+// =====================================================
+function updateProgress() {
+  const total = allQuestions.length;
+  const answered = currentQIndex + 1;
+  const pct = Math.min(100, Math.round((answered / total) * 100));
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+}
+
+// =====================================================
+// INIT
+// =====================================================
+buildTopicsGrid();
+buildFCTopicBtns();
+buildQuizTopicSelector();
+setFCTopic('all', document.querySelector('#fc-section-btns button'));
+</script>
+</body>
+</html>
