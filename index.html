@@ -378,6 +378,27 @@
             color: var(--ink-soft);
         }
 
+        .slide-points li strong {
+            font-weight: 700;
+        }
+
+        .sub-point {
+            display: block;
+            margin-top: 5px;
+            padding-left: 15px;
+            position: relative;
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: var(--ink-soft);
+        }
+
+        .sub-point::before {
+            content: "›";
+            position: absolute;
+            left: 0;
+            color: var(--ink-soft);
+        }
+
         .lesson-nav {
             display: flex;
             gap: 10px;
@@ -738,47 +759,289 @@
 
         const LESSONS = {
             purpose: [
-                { title: "What is accounting?", points: ["Recording financial transactions — money in and money out", "Turning those records into financial information", "Poor records make business failure far more likely"] },
-                { title: "Record transactions", points: ["Track all sales (money in) and expenses (money out)", "Missing this = unpaid bills, chasing payments", "Wrong records = wrong tax paid to HMRC"] },
-                { title: "Management", points: ["Managers plan, monitor and control resources", "Balances cash coming in vs wages, stock, bills going out"] },
-                { title: "Compliance", points: ["Laws & regulations force fair, accurate reporting", "Protects investors from being misled", "Helps guard against fraud"] },
-                { title: "Measuring performance", points: ["Gross profit = sales revenue − cost of goods sold", "Net profit = gross profit − other expenses", "Shows money owed to and by the business"] },
-                { title: "Control", points: ["Trade receivables = owed TO the business", "Trade payables = owed BY the business", "Credit control = getting paid on time"] },
-                { title: "Key terms recap", points: ["HMRC — collects UK taxes", "Fraud — money taken illegally for personal gain", "Asset — anything of value owned by a business", "Amortisation — spreading the repayment of a loan, or the cost of an intangible asset, over a set timeframe"] }
+                {
+                    title: "What is accounting?", points: [
+                        "Accounting means recording every **financial transaction** a business makes — planned or actual — then turning those records into financial information.",
+                        "A financial transaction is any time money moves in or out of the business — e.g. making a sale, or paying a bill.",
+                        "Think of it as **'numbers paint a thousand words'** — owners, employees and investors all judge how a business is really doing by its accounts, not just by the idea behind it.",
+                        "A brilliant business idea with poor financial records is 'almost certain to be doomed to failure' — the numbers have to back up the idea."
+                    ]
+                },
+                {
+                    title: "Record transactions", points: [
+                        "The owner or a bookkeeper must record **all money coming in** (sales) and **all money going out** (expenses) — every transaction, not just the big ones.",
+                        "Why it matters:\n– If it isn't done, bills go unpaid and payments never get chased up\n– Wrong records mean wrong figures reported to HMRC, so the business may pay the wrong amount of tax",
+                        "**HMRC** (HM Revenue & Customs) is the UK government department that collects all types of tax — it relies on businesses reporting accurately."
+                    ]
+                },
+                {
+                    title: "Management of the business", points: [
+                        "A manager's job is to **plan, monitor and control** the resources they're responsible for — staff, materials, stock and money.",
+                        "Clear, accurate accounts let a manager make informed decisions and plan ahead, e.g. can we afford to hire someone or order more stock?",
+                        "The core balancing act: money coming in from sales has to cover money going out — wages, new stock, bills and other cash outflows."
+                    ]
+                },
+                {
+                    title: "Compliance", points: [
+                        "Financial reporting is controlled by **laws and regulations**, so every business's records give a fair and accurate picture.",
+                        "Why compliance matters:\n– Protects investors and other stakeholders from being misinformed about how the business is really performing\n– Helps guard against fraud",
+                        "**Fraud** = when company money is used inappropriately, or acquired by the wrong person, for personal gain, through illegal actions.",
+                        "Example: without regulation, a struggling business could publish misleading accounts to attract investors who'd otherwise stay away."
+                    ]
+                },
+                {
+                    title: "Measuring performance", points: [
+                        "Without financial records a business can't tell whether it's making a **profit** (revenue higher than costs) or a **loss** (costs higher than revenue).",
+                        "**Gross profit** = sales revenue − cost of goods sold (the cost of the materials used to make what was sold).",
+                        "**Net profit** = gross profit − all other expenses, e.g. rent and advertising. This is the 'real' bottom-line profit figure.",
+                        "Records also reveal value owed TO the business (unpaid sales) and value owed BY the business (unpaid bills) — essential for knowing if it's in debt to others."
+                    ]
+                },
+                {
+                    title: "Control", points: [
+                        "**Trade receivables** = money owed TO the business — customers who bought on credit but haven't paid yet.",
+                        "**Trade payables** = money owed BY the business — suppliers it bought from on credit but hasn't paid yet.",
+                        "**Credit control** = making sure everyone who owes the business money pays on time, so it can meet its own day-to-day bills.",
+                        "If receivables and payables aren't carefully controlled, the business risks running out of cash to survive — even if it looks profitable on paper."
+                    ]
+                },
+                {
+                    title: "Key terms recap", points: [
+                        "**HMRC** — the UK government department responsible for collecting all types of tax.",
+                        "**Fraud** — when an individual acquires company money for personal gain, through illegal actions.",
+                        "**Asset** — any item of value owned by an individual or a business, e.g. cash, equipment, property.",
+                        "**Amortisation** — spreading the repayment of a loan, or the cost of an intangible asset (like a patent), over a set period of time — a similar idea to depreciation."
+                    ]
+                }
             ],
             income: [
-                { title: "Two types of income", points: ["Capital income — sets up or grows the business, long-term", "Revenue income — day-to-day trading money"] },
-                { title: "Loans & mortgages", points: ["Loan — lump sum + interest, often secured on an asset", "Mortgage — bigger sum, longer term (~25 yrs), secured on property"] },
-                { title: "Shares & owner's capital", points: ["Shares — sold to shareholders, who get a vote + dividend", "Owner's capital — the owner's own savings, high personal risk"] },
-                { title: "Debentures", points: ["Medium- to long-term loan capital", "Fixed interest, repaid as a lump sum"] },
-                { title: "Sales & rent received", points: ["Sales — cash sales (pay now) or credit sales (pay later)", "Rent received — income from renting out property you own"] },
-                { title: "Commission & interest received", points: ["Commission — % fee for selling on behalf of another business", "Interest received — earned on savings or money lent out"] },
-                { title: "Discount received", points: ["A % off given to YOUR business", "Usually for quick payment or a bulk order"] }
+                {
+                    title: "Two types of income", points: [
+                        "**Capital income** — money invested by owners or other investors to set up or grow a business. Used for things that stay in the business medium-to-long term, e.g. premises, vehicles, equipment — these are called **fixed assets**.",
+                        "**Revenue income** — money from the business's day-to-day trading: selling goods or providing a service.",
+                        "Rule of thumb: capital income is a one-off injection to build the business; revenue income keeps flowing in from normal, everyday trading."
+                    ]
+                },
+                {
+                    title: "Loans", points: [
+                        "A **loan** is a lump sum borrowed from a bank or financial institution, repaid at a set amount each month, often over around 5 years (though longer terms can be agreed).",
+                        "On top of repaying the loan itself, the business pays **interest** — a charge for borrowing, calculated as a % of the amount borrowed, which can be fixed or variable.",
+                        "**Advantages:**\n– Regular, pre-agreed repayments make planning and budgeting easier\n– Ownership and control of the business is not lost",
+                        "**Disadvantages:**\n– Interest makes it a relatively expensive source of finance, and it must be paid even if the business isn't making a profit\n– Often secured against an asset (e.g. the owner's home or company vehicles), which the bank can claim if repayments are missed"
+                    ]
+                },
+                {
+                    title: "Mortgages", points: [
+                        "A **mortgage** works like a bigger, longer version of a loan — typically around 25 years — used to buy premises such as a factory, shop or warehouse.",
+                        "Mortgages are always **secured against an asset**, normally the property itself.",
+                        "**Advantages:**\n– Large amounts of finance can be raised and repaid over a long period\n– Ownership and control of the business is not lost",
+                        "**Disadvantages:**\n– Interest is charged and rates can fluctuate over time\n– The asset can be seized if repayments are missed; not suitable for small amounts or short-term needs"
+                    ]
+                },
+                {
+                    title: "Shares", points: [
+                        "When a business registers with **Companies House** it becomes a company and can issue **shares** to shareholders.",
+                        "Shareholders are part-owners of the business — the more shares they hold, the more say (voting right) they have in decisions.",
+                        "In return for investing, shareholders are rewarded with a **dividend** — a share of the profits."
+                    ]
+                },
+                {
+                    title: "Owner's capital & partnerships", points: [
+                        "**Owner's capital** = money invested in the business from the owner's own personal savings.",
+                        "A **sole trader** funds the business entirely from their own savings or personal loans — often secured against their own house.",
+                        "This is high risk (the sole trader is personally responsible for all the business's debts) but if it succeeds, they keep 100% of the profit for themselves.",
+                        "A **partnership** shares the capital, decision-making and profit between two or more people — spreading the risk, though loans are still usually secured against the partners' own assets."
+                    ]
+                },
+                {
+                    title: "Debentures", points: [
+                        "A **debenture** is a medium- to long-term form of loan capital, often used by large companies to secure income.",
+                        "It pays interest, normally at a **fixed rate**, and the debenture itself is repaid as one lump sum on a pre-agreed date. It can be secured against an asset.",
+                        "**Advantages:**\n– The fixed interest rate makes repayments predictable, so it's easy to budget for\n– No shares are issued, so ownership and control of the business stay the same",
+                        "**Disadvantages:**\n– Interest still has to be paid even if the business isn't profitable\n– A large lump sum has to be found to repay it in full on the agreed date"
+                    ]
+                },
+                {
+                    title: "Sales & rent received", points: [
+                        "**Sales (sales turnover)** = money coming in from selling goods or services. It's determined by the price charged and the number of customers.",
+                        "Sales can be **cash sales** (customer pays there and then) or **credit sales** (customer buys now, pays later) — this matters later when you study cash flow.",
+                        "**Rent received** = income earned by a business that owns property and charges others to use all or part of it, e.g. renting out spare rooms, land or offices."
+                    ]
+                },
+                {
+                    title: "Commission & interest received", points: [
+                        "**Commission received** = a fee (flat or a %) earned for selling another business's product or service as their agent.",
+                        "Example: buying a concert ticket via Ticketmaster — Ticketmaster earns commission on every ticket sold on behalf of whichever company is hosting the event.",
+                        "**Interest received** = money earned on savings held in the bank, or on money the business has lent out to someone else."
+                    ]
+                },
+                {
+                    title: "Discount received", points: [
+                        "**Discount received** = a percentage taken off a purchase, given TO the business by a supplier.",
+                        "Usually offered in return for paying quickly, or for ordering in bulk.",
+                        "This reduces the business's own costs — it's a saving for the business, not something it gives away."
+                    ]
+                }
             ],
             expenditure: [
-                { title: "Two types of expenditure", points: ["Capital expenditure — buys long-term capital items", "Revenue expenditure — day-to-day running costs"] },
-                { title: "Non-current assets", points: ["Land, premises, machinery, vehicles, fixtures", "Shown on the statement of financial position", "Most lose value over time → depreciated"] },
-                { title: "Goodwill & patents", points: ["Goodwill — value of a business's reputation & customer base", "Patents — legal protection of an invention"] },
-                { title: "Trademarks & brand name", points: ["Trademark — symbol, logo, name or colour that sets a business apart", "Brand name — builds customer expectations"] },
-                { title: "Premises costs", points: ["Rent — using premises you don't own", "Rates — paid to council for local services", "Heating, lighting & water — regular utility bills"] },
-                { title: "Insurance", points: ["Buildings & contents insurance", "Public liability & employers' liability insurance"] },
-                { title: "Staffing costs", points: ["Salary — fixed annual amount, paid monthly", "Wage — hourly rate × hours worked"] },
-                { title: "Other running costs", points: ["Marketing, administration, bank charges, interest paid"] },
-                { title: "Depreciation & discount allowed", points: ["Depreciation — spreads an asset's cost over its useful life", "Straight-line = same amount depreciated each year", "Discount allowed — % off given TO customers"] }
+                {
+                    title: "Two types of expenditure", points: [
+                        "**Capital expenditure** — buying **capital items**: assets that stay in the business for a long period of time, e.g. machinery, vehicles, premises.",
+                        "**Revenue expenditure** — day-to-day running costs needed to keep the business trading, e.g. wages, rent, stock.",
+                        "Quick test: will it still be in use a year from now? Capital expenditure = yes. Revenue expenditure = no, it's used up straight away."
+                    ]
+                },
+                {
+                    title: "Non-current (tangible) assets", points: [
+                        "**Non-current assets** = land & premises, machinery & equipment, vehicles, fixtures & fittings — items that stay in the business for a reasonable period of time.",
+                        "Shown on the business's **statement of financial position** (balance sheet), which balances what the business owns against what it owes.",
+                        "Also called **tangible assets**, because they can physically be touched.",
+                        "Most lose value over time, so they're **depreciated** — their value on the balance sheet is reduced each year to keep it realistic."
+                    ]
+                },
+                {
+                    title: "Intangibles: goodwill & patents", points: [
+                        "An **intangible asset** adds value to the business but can't be physically touched.",
+                        "**Goodwill** — the added value of an existing business's reputation and established customer base when it's bought. Hard to put an exact figure on — how much would you pay for a recognised brand name?",
+                        "**Patent** — legal protection for an invention or a unique product/process, stopping competitors from copying the idea. Lets the business charge a premium price for something genuinely new."
+                    ]
+                },
+                {
+                    title: "Intangibles: trademarks & brand name", points: [
+                        "**Trademark** — a symbol, logo, brand name, word or even a specific colour that sets one business's goods/services apart from its competitors, e.g. Cadbury's shade of purple or Heinz's turquoise cans.",
+                        "Trademarks build **brand loyalty** and influence customer choice, so they're recorded as an intangible asset.",
+                        "**Brand name** — a recognised feature of a business that sets customer expectations, based on previous experience. Often described as 'a promise of what to expect'."
+                    ]
+                },
+                {
+                    title: "Premises running costs", points: [
+                        "**Rent** — the regular (usually monthly) cost of using premises the business doesn't own.",
+                        "**Rates** — a payment to the local council for services like street lighting and refuse collection — the business version of council tax, calculated by the size, location and nature of the premises.",
+                        "**Heating & lighting** — gas and electricity bills, usually billed quarterly (every 3 months).",
+                        "**Water** — payment for the supply of water, either a fixed rate or based on usage if a meter is fitted."
+                    ]
+                },
+                {
+                    title: "Insurance", points: [
+                        "Businesses are legally required to hold several types of insurance to protect against serious losses:",
+                        "**Buildings insurance** — protects the physical building itself, e.g. from fire.\n**Contents insurance** — protects what's inside (machinery, fixtures & fittings, stock), e.g. from flooding.",
+                        "**Public liability insurance** — covers harm or injury to members of the public on the premises.\n**Employers' liability insurance** — covers compensation and legal costs if an employee is injured at work."
+                    ]
+                },
+                {
+                    title: "Staffing costs", points: [
+                        "**Salary** — a fixed annual figure paid in equal monthly instalments, e.g. £18,000/year = £1,500/month gross pay.",
+                        "The business also has to pay employer's **National Insurance** on top of a salary — a real extra cost beyond what the employee actually takes home.",
+                        "**Wage** — an hourly rate, directly linked to the number of hours worked. More flexible for both employer and employee, but less predictable than a salary."
+                    ]
+                },
+                {
+                    title: "Other day-to-day costs", points: [
+                        "**Marketing** — advertisements, promotional literature/events, point-of-sale materials — anything spent attracting and convincing customers to buy.",
+                        "**Administration** — postage, printing, stationery, and telephone charges (landline costs split into line rental, paid in advance, and call charges, paid after use).",
+                        "**Bank charges** — fees banks charge businesses for transactions (unlike free personal banking) — these can add up once any introductory free period ends.",
+                        "**Interest paid** — the ongoing cost of borrowing via a loan or mortgage the business already has."
+                    ]
+                },
+                {
+                    title: "Depreciation & discount allowed", points: [
+                        "**Depreciation** — spreads the cost of an asset over its useful life, instead of showing the full cost as a one-off expense. Example: a £50,000 machine expected to last 5 years might be shown as a £10,000 expense per year.",
+                        "**Straight-line depreciation** — the same fixed amount is depreciated every year.",
+                        "**Reducing balance depreciation** — a set % of the asset's remaining value is depreciated each year, so the amount gets smaller over time.",
+                        "**Discount allowed** — a percentage reduction given TO customers, e.g. for bulk buying. This is a cost to the business, because it reduces the cash coming in."
+                    ]
+                }
             ],
             finance: [
-                { title: "Internal vs external", points: ["Internal — money from within the business", "External — money from outside the business", "Short-term = repaid within 1 year, long-term = over 1 year"] },
-                { title: "Retained profit", points: ["+ No interest charges, available immediately", "− Limited to what's already been earned"] },
-                { title: "Net current assets", points: ["Current assets minus current liabilities", "+ Encourages good cash-flow management", "− Can strain supplier or customer relationships"] },
-                { title: "Sale of assets", points: ["+ No interest, frees up capital tied up in assets", "− May sell for less than the asset's true value"] },
-                { title: "Loans & mortgages", points: ["+ Regular repayments, ownership not lost", "− Interest charged, often secured against an asset"] },
-                { title: "Crowd-funding", points: ["+ Reaches a large number of investors online", "− Partial loss of ownership, no guarantee of success"] },
-                { title: "Venture capital", points: ["+ Comes with expert advice and mentoring", "− Loss of ownership & control, possible conflict"] },
-                { title: "Debt factoring", points: ["+ Speeds up cash flow, factor takes on bad-debt risk", "− Business only receives a % of what's owed"] },
-                { title: "Hire purchase & leasing", points: ["Both spread the cost of an asset over time", "− Total cost is usually higher than buying outright", "Leasing — you never own the asset"] },
-                { title: "Trade credit", points: ["+ Delays payment, helps cash flow", "− Short-term only, may lose early-payment discounts"] },
-                { title: "Grants & donations", points: ["+ No repayment or interest charges", "− Grants need lengthy applications; donations are small & unpredictable"] },
-                { title: "Peer-to-peer & invoice discounting", points: ["Peer-to-peer lending — can beat bank interest rates", "Invoice discounting — no repayment, but often cash-only"] }
+                {
+                    title: "Internal vs external finance", points: [
+                        "**Internal sources of finance** — money that already exists within the business.",
+                        "**External sources of finance** — money that comes from outside the business (banks, investors, government, and so on).",
+                        "**Short-term finance** — has to be repaid within 1 year. **Long-term finance** — repaid over a period of more than 1 year.",
+                        "What the money is needed for decides the best source, e.g. a mortgage suits buying a factory (capital expenditure), but not restocking shelves (revenue expenditure)."
+                    ]
+                },
+                {
+                    title: "Retained profit", points: [
+                        "**Retained profit** = sales revenue minus total costs, kept inside the business to fund future spending, instead of being paid out to owners/shareholders.",
+                        "**Advantages:**\n– No interest charges, and it's available immediately\n– No loss of ownership or control",
+                        "**Disadvantages:**\n– Only ever as much as the business has already earned\n– Reduces payments to shareholders (which can cause dissatisfaction); once spent, it's no longer available"
+                    ]
+                },
+                {
+                    title: "Net current assets", points: [
+                        "**Net current assets** = current assets minus current liabilities — the money available inside the business to fund day-to-day expenditure.",
+                        "**Advantages:**\n– Encourages the business to manage its cash flow effectively",
+                        "**Disadvantages:**\n– Offering shorter credit terms to customers can put pressure on those relationships\n– Holding less stock can make it harder to meet customer demand"
+                    ]
+                },
+                {
+                    title: "Sale of assets", points: [
+                        "Selling something of value the business owns, in order to achieve an immediate cash injection.",
+                        "**Advantages:**\n– No interest charges\n– Frees up capital that was tied up in an asset the business may no longer need",
+                        "**Disadvantages:**\n– The amount received is often not a true reflection of the asset's real value\n– If the asset is still needed, it may have to be leased back, increasing costs long-term"
+                    ]
+                },
+                {
+                    title: "Loans & mortgages", points: [
+                        "**Loan** — a set sum borrowed for a specific purpose, repaid over an agreed period with interest.",
+                        "**Mortgage** — a larger, longer-term loan (around 25 years), always secured against a specific asset, usually property.",
+                        "**Advantages:**\n– Regular, pre-agreed repayments make planning and budgeting easier\n– Ownership and control of the business isn't lost",
+                        "**Disadvantages:**\n– Interest is charged (and rates can fluctuate) regardless of whether a profit is made\n– Usually secured against an asset, which can be seized if repayments are missed"
+                    ]
+                },
+                {
+                    title: "Crowd-funding", points: [
+                        "Raising finance from a **large number of investors online**, many contributing small amounts, which are only collected once the target is met.",
+                        "**Advantages:**\n– Access to a large pool of potential investors\n– No interest is paid — investors are only rewarded if/when the business is later sold on",
+                        "**Disadvantages:**\n– Partial loss of ownership\n– No guarantee the campaign will attract enough investment to reach its target"
+                    ]
+                },
+                {
+                    title: "Venture capital", points: [
+                        "Investment from an **experienced entrepreneur** in return for a stake (equity) in the business.",
+                        "**Advantages:**\n– Comes with valuable advice and mentoring alongside the money\n– Venture capitalists are often willing to take on risks that banks won't",
+                        "**Disadvantages:**\n– Partial loss of ownership and control\n– Possible conflict between the entrepreneur and venture capitalist over the business's direction"
+                    ]
+                },
+                {
+                    title: "Debt factoring", points: [
+                        "Selling a business's unpaid customer debts to a **third party (a 'factor')** in exchange for quick cash.",
+                        "**Advantages:**\n– Speeds up the flow of cash into the business\n– The factor company takes on the risk of chasing (and any bad) debt",
+                        "**Disadvantages:**\n– The business only receives a percentage of the amount owed, reducing profit\n– Can give the wrong impression, or alienate, customers"
+                    ]
+                },
+                {
+                    title: "Hire purchase & leasing", points: [
+                        "Both let a business **use an asset while paying in instalments**, spreading the cost over its useful life.",
+                        "**Hire purchase** — the asset only becomes the business's property once the final instalment has been paid.",
+                        "**Leasing** — ownership always stays with the supplier, who is also responsible for maintaining and repairing the asset.",
+                        "**Shared disadvantage:** the overall amount paid is usually higher than if the asset had been bought outright."
+                    ]
+                },
+                {
+                    title: "Trade credit", points: [
+                        "A period of time (e.g. 30 days) offered by a **supplier**, letting the business receive goods or services now and pay at a later date.",
+                        "**Advantages:**\n– Delays the need to pay, helping day-to-day cash flow\n– No loss of ownership or control",
+                        "**Disadvantages:**\n– Only suitable as a short-term source of finance\n– May mean losing out on discounts only offered for quick/cash payment"
+                    ]
+                },
+                {
+                    title: "Grants & donations", points: [
+                        "**Grant** — a lump sum from the government or another organisation for a specific purpose, e.g. creating jobs in a deprived area, or environmental research.",
+                        "**Donation** — a sum of money given voluntarily, typically to a charity or social enterprise.",
+                        "**Advantages (both):**\n– No need to repay, and no interest charges",
+                        "**Disadvantages:**\n– Grants often need a lengthy application and may come with conditions attached\n– Donations tend to be small amounts and unpredictable"
+                    ]
+                },
+                {
+                    title: "Peer-to-peer lending & invoice discounting", points: [
+                        "**Peer-to-peer lending** — one business/individual lends money directly to another in return for interest payments, sometimes at better rates than a traditional bank.",
+                        "**Invoice discounting** — a reduction offered to make a product or service cheaper for the customer, often applied as a percentage.",
+                        "**Advantages:**\n– Peer-to-peer can beat bank interest rates, with a fixed rate agreed for easier budgeting\n– Invoice discounting needs no repayment and keeps full ownership/control",
+                        "**Disadvantages:**\n– Peer-to-peer amounts available may be limited and provided short-term only\n– Invoice discounting is often only available if purchases are paid in cash, which can hurt cash flow"
+                    ]
+                }
             ]
         };
 
@@ -821,36 +1084,82 @@
             ]
         };
 
-        const QUIZ = {
+        /* Each topic has a bigger pool than any one quiz run uses — a fresh
+           random subset (with shuffled answer order) is drawn every time
+           the quiz is opened, so it isn't the same 5 questions on repeat. */
+        const QUIZ_POOL = {
             purpose: [
                 { q: "Why does a business need to keep accurate records of money in and out?", options: ["So the office looks organised", "To avoid trouble with HMRC and report performance accurately", "To reduce the number of staff needed", "To avoid paying rent"], correct: 1, hint: "Think about who collects tax.", explain: "Bad records mean unpaid bills, missed payments, and wrong tax figures to HMRC." },
                 { q: "What is net profit?", options: ["Sales revenue minus cost of goods sold", "Gross profit minus other expenses (rent, advertising, etc.)", "The total amount owed to the business", "Total sales revenue only"], correct: 1, hint: "It comes AFTER gross profit.", explain: "Net profit = gross profit − other expenses like rent and advertising." },
                 { q: "A trade receivable is...", options: ["Money the business owes to suppliers", "Money owed TO the business from unpaid sales", "A type of bank loan", "A fixed asset like machinery"], correct: 1, hint: "'Receivable' — the business is going to RECEIVE it.", explain: "Trade receivables = money owed to the business from sales not yet paid for." },
                 { q: "Compliance with financial laws mainly helps to...", options: ["Reduce staff wages", "Protect investors and guard against fraud", "Increase sales instantly", "Avoid paying rates"], correct: 1, hint: "It's about trust and honesty in the numbers.", explain: "Regulations ensure records are fair and accurate, protecting stakeholders and preventing fraud." },
-                { q: "Fraud is best described as...", options: ["A legal business expense", "Company money used inappropriately or acquired by the wrong person for personal gain", "A type of tax", "A financial statement"], correct: 1, hint: "It's illegal.", explain: "Fraud = money acquired by the wrong person for personal gain, through illegal actions." }
+                { q: "Fraud is best described as...", options: ["A legal business expense", "Company money used inappropriately or acquired by the wrong person for personal gain", "A type of tax", "A financial statement"], correct: 1, hint: "It's illegal.", explain: "Fraud = money acquired by the wrong person for personal gain, through illegal actions." },
+                { q: "What does 'compliance' with financial laws and regulations mainly protect against?", options: ["Increased rent charges", "Fraud and misleading investors", "Lower sales", "Employee absence"], correct: 1, hint: "Think about who reads the accounts.", explain: "Compliance ensures accurate reporting, protecting stakeholders and helping prevent fraud." },
+                { q: "Which of the following is an example of a financial transaction?", options: ["Interviewing a new employee", "Paying a supplier's bill", "Writing a job advert", "Booking a delivery van without paying"], correct: 1, hint: "It must involve money moving.", explain: "A financial transaction involves money going into or out of the business, like paying a bill." },
+                { q: "What is gross profit?", options: ["Sales revenue minus cost of goods sold", "Total sales revenue only", "Gross profit minus expenses", "Money owed to the business"], correct: 0, hint: "It's the first profit figure calculated.", explain: "Gross profit = sales revenue − cost of goods sold." },
+                { q: "What does 'value owed by the business' mean?", options: ["Money customers owe the business", "Money the business owes to others for goods/services not yet paid for", "The business's total profit", "The value of its fixed assets"], correct: 1, hint: "'Owed BY' — the business is the one who owes.", explain: "This is the amount the business owes others — essentially its trade payables." },
+                { q: "An accountant would describe amortisation as...", options: ["Increasing the value of an asset each year", "Spreading the repayment of a loan or the cost of an intangible asset over time", "A one-off tax payment", "A type of insurance"], correct: 1, hint: "Similar idea to depreciation, but often for loans/intangibles.", explain: "Amortisation spreads the repayment of a loan, or the cost of an intangible asset, over a set period." },
+                { q: "Why is management of a business linked to accounting?", options: ["Managers only deal with marketing", "Understanding accounts helps managers plan, monitor and control resources", "Accounts are only used for tax purposes", "Management has no link to accounting"], correct: 1, hint: "Think planning / monitoring / controlling.", explain: "A manager who understands the accounts can make better-informed decisions about resources." }
             ],
             income: [
                 { q: "Which of these is a source of CAPITAL income?", options: ["Sales", "Rent received", "Mortgage", "Commission received"], correct: 2, hint: "Capital income sets up or grows the business long-term.", explain: "A mortgage is a long-term loan used to buy premises — capital income." },
                 { q: "A debenture is...", options: ["A short-term overdraft", "Medium/long-term loan capital, fixed interest, repaid as a lump sum", "A type of share issued to the public", "Revenue earned from sales"], correct: 1, hint: "It's a form of loan capital.", explain: "Debentures are medium- to long-term loan capital with fixed interest, repaid in a lump sum." },
                 { q: "Commission received is money earned from...", options: ["Interest on savings", "Selling another business's product or service as their agent", "Renting out property", "A supplier's discount"], correct: 1, hint: "Think 'estate agent' or 'ticket seller'.", explain: "Commission is a % fee earned for completing a sale on behalf of another business." },
                 { q: "A sole trader mainly raises capital income through...", options: ["Issuing shares to the public", "Owner's capital and personal loans", "Venture capital only", "Debentures only"], correct: 1, hint: "Sole traders can't issue shares.", explain: "Sole traders rely on their own savings or personal loans, often secured on their home." },
-                { q: "Discount received happens when...", options: ["A business gives customers money off", "A business is given a % off a purchase, e.g. for quick payment", "A business borrows money from a bank", "A business pays its rent"], correct: 1, hint: "'Received' — the business is on the receiving end.", explain: "Discount received reduces the business's own costs, e.g. from a supplier." }
+                { q: "Discount received happens when...", options: ["A business gives customers money off", "A business is given a % off a purchase, e.g. for quick payment", "A business borrows money from a bank", "A business pays its rent"], correct: 1, hint: "'Received' — the business is on the receiving end.", explain: "Discount received reduces the business's own costs, e.g. from a supplier." },
+                { q: "Which of these is an example of REVENUE income?", options: ["A bank loan", "Owner's capital", "Commission received", "Sale of shares"], correct: 2, hint: "Revenue income comes from day-to-day trading.", explain: "Commission received comes from ongoing trading activity, making it revenue income." },
+                { q: "What do shareholders receive in return for investing capital income?", options: ["A wage", "A dividend — a share of the profits", "A loan", "A grant"], correct: 1, hint: "It's a reward linked to profit.", explain: "Shareholders are rewarded with a dividend — a share of the profits." },
+                { q: "Fixed assets bought with capital income tend to be...", options: ["Used up within a day", "Kept in the business medium-to-long term, e.g. premises or equipment", "Sold immediately for a loss", "Only intangible items"], correct: 1, hint: "Think 'fixed' — as in staying put.", explain: "Capital income buys fixed assets that stay in the business for the medium-to-long term." },
+                { q: "A mortgage is best described as...", options: ["A short-term overdraft", "A long-term loan secured on a property, e.g. around 25 years", "A type of share", "Money invested by the owner"], correct: 1, hint: "Same idea as a house mortgage, but for premises.", explain: "Mortgages are long-term loans, typically 25 years, secured against an asset such as property." },
+                { q: "Why is being a sole trader considered high risk when raising capital income?", options: ["They must issue shares to the public", "They are personally responsible for all the business's debts", "They cannot legally borrow money", "They automatically lose ownership"], correct: 1, hint: "Think about what happens if the business fails.", explain: "A sole trader is personally liable for business debts, often risking personal assets like their home." }
             ],
             expenditure: [
                 { q: "Which of these is an intangible asset?", options: ["Machinery", "Goodwill", "Premises", "Vehicles"], correct: 1, hint: "It can't be touched.", explain: "Goodwill, patents, trademarks and brand name are intangible assets." },
                 { q: "Depreciation is...", options: ["Money earned on savings", "A technique to spread an asset's cost over its useful life", "A type of insurance", "A type of revenue income"], correct: 1, hint: "It matches cost to how long you use the asset.", explain: "Depreciation spreads the cost of an asset (e.g. a £50,000 machine) over its useful life." },
                 { q: "Which of these is REVENUE expenditure?", options: ["Buying a factory", "Buying a patent", "Paying staff wages", "Buying new machinery"], correct: 2, hint: "Which one happens every week or month?", explain: "Wages are a regular, day-to-day cost — revenue expenditure." },
                 { q: "A trademark protects...", options: ["An invention or process", "A symbol, logo, brand name or colour that sets a business apart", "A building", "A company vehicle"], correct: 1, hint: "Think of a distinctive colour like Cadbury purple.", explain: "Trademarks distinguish a business's goods/services and build brand loyalty." },
-                { q: "Employers' liability insurance protects against...", options: ["Fire damage to a building", "Claims if an employee is injured at work", "Flood damage to stock", "Accidents to members of the public"], correct: 1, hint: "It's about the EMPLOYEE, not the building or public.", explain: "Employers' liability insurance covers compensation/legal costs if an employee is hurt at work." }
+                { q: "Employers' liability insurance protects against...", options: ["Fire damage to a building", "Claims if an employee is injured at work", "Flood damage to stock", "Accidents to members of the public"], correct: 1, hint: "It's about the EMPLOYEE, not the building or public.", explain: "Employers' liability insurance covers compensation/legal costs if an employee is hurt at work." },
+                { q: "Buying a company vehicle is an example of...", options: ["Revenue expenditure", "Capital expenditure", "Revenue income", "Capital income"], correct: 1, hint: "Will it stay in the business over a year?", explain: "Vehicles are non-current (capital) assets, so buying one is capital expenditure." },
+                { q: "Rates are paid to...", options: ["A bank", "The local council, for services like street lighting and refuse collection", "HMRC, for income tax", "Shareholders, as a dividend"], correct: 1, hint: "Think 'business version of council tax'.", explain: "Rates are paid to the local council to fund local services." },
+                { q: "Reducing balance depreciation means...", options: ["The same fixed amount is depreciated every year", "A set % of the asset's remaining value is depreciated each year", "The asset increases in value each year", "Depreciation only happens once"], correct: 1, hint: "The amount gets smaller each year.", explain: "Reducing balance depreciation applies a fixed % to the asset's remaining (reducing) value each year." },
+                { q: "Public liability insurance protects against...", options: ["Damage to the building itself", "Harm or injury to members of the public on the premises", "Employee injury claims", "Loss of stock from flooding"], correct: 1, hint: "Think about visitors/customers, not staff.", explain: "Public liability insurance covers harm to members of the public, unlike employers' liability (staff)." },
+                { q: "Which of these is REVENUE expenditure?", options: ["Buying a patent", "Paying for heating and lighting", "Buying premises", "Buying machinery"], correct: 1, hint: "Which one is a regular running cost?", explain: "Heating and lighting are regular, day-to-day running costs — revenue expenditure." }
             ],
             finance: [
                 { q: "Retained profit is an example of...", options: ["External finance", "Internal finance", "A grant", "A mortgage"], correct: 1, hint: "It comes from inside the business.", explain: "Retained profit is profit kept inside the business — an internal source of finance." },
                 { q: "A key disadvantage of a bank loan is...", options: ["No interest is ever charged", "Interest must be paid regardless of profit, often secured against an asset", "It never needs repaying", "It's only available to shareholders"], correct: 1, hint: "What happens if the business isn't doing well?", explain: "Loan interest is charged whether or not the business is profitable, and can be secured against assets." },
                 { q: "Crowd-funding's main advantage is that it...", options: ["Guarantees the funding target will be reached", "Raises finance from a large number of investors, often online", "Means giving up total control immediately", "Comes with zero risk"], correct: 1, hint: "Think 'crowd' — lots of small investors.", explain: "Crowd-funding attracts many investors, often via the internet, but there's no guarantee it will succeed." },
                 { q: "Debt factoring involves...", options: ["Buying extra stock on credit", "Selling a business's debts to a third party for quick cash", "Renting equipment instead of buying it", "A type of insurance for debts"], correct: 1, hint: "A 'factor' company takes over the debt-chasing.", explain: "The factor pays a % of the debt upfront and takes on the job (and risk) of collecting it." },
-                { q: "A key disadvantage of leasing is that...", options: ["You own the asset immediately", "The overall cost is usually higher than buying outright, and you never own the asset", "It needs a large upfront deposit", "There are no ongoing payments"], correct: 1, hint: "Who keeps ownership throughout a lease?", explain: "Leasing spreads cost but ownership stays with the supplier and total cost is usually higher." }
+                { q: "A key disadvantage of leasing is that...", options: ["You own the asset immediately", "The overall cost is usually higher than buying outright, and you never own the asset", "It needs a large upfront deposit", "There are no ongoing payments"], correct: 1, hint: "Who keeps ownership throughout a lease?", explain: "Leasing spreads cost but ownership stays with the supplier and total cost is usually higher." },
+                { q: "Which of these is an internal source of finance?", options: ["Venture capital", "Retained profit", "Debt factoring", "Peer-to-peer lending"], correct: 1, hint: "'Internal' means from inside the business.", explain: "Retained profit comes from within the business, making it an internal source of finance." },
+                { q: "What is the main disadvantage of using trade credit?", options: ["It's only suitable short-term and may lose early-payment discounts", "It requires giving up ownership", "Interest rates are very high", "It can only be used once"], correct: 0, hint: "Think about the time limits suppliers give.", explain: "Trade credit is only suitable short-term and may cause the loss of discounts for quick payment." },
+                { q: "Hire purchase and leasing both...", options: ["Give immediate ownership of the asset", "Spread the cost of using an asset over instalments", "Require no payments at all", "Only apply to premises"], correct: 1, hint: "Think 'paying in instalments'.", explain: "Both spread the cost of an asset over time through instalments, though ownership differs." },
+                { q: "A grant is best described as...", options: ["A loan that must be repaid with interest", "A lump sum from government/an organisation for a specific purpose, with no repayment needed", "Money invested by a venture capitalist", "A type of share"], correct: 1, hint: "Think 'free money with conditions'.", explain: "Grants don't need repaying but often require a lengthy application and may have conditions attached." },
+                { q: "Which is a disadvantage of venture capital?", options: ["No interest is paid", "Partial loss of ownership and control, and possible conflict over direction", "It cannot be used by small businesses", "No advice or mentoring is provided"], correct: 1, hint: "Think about what an investor gets in return.", explain: "Venture capitalists take a stake in the business, potentially causing loss of control and conflict." }
             ]
         };
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+        function buildQuizSet(topicId) {
+            const pool = QUIZ_POOL[topicId];
+            const count = Math.min(6, pool.length);
+            return shuffle(pool).slice(0, count).map(q => {
+                const order = shuffle(q.options.map((_, i) => i));
+                return {
+                    q: q.q,
+                    hint: q.hint,
+                    explain: q.explain,
+                    options: order.map(i => q.options[i]),
+                    correct: order.indexOf(q.correct)
+                };
+            });
+        }
 
         /* =========================================================
            STATE
@@ -864,6 +1173,7 @@
             cardFlipped: false,
             cardKnown: {},
             quizIndex: 0,
+            quizSet: [],
             quizSelected: null,
             quizScore: 0,
             quizDone: false,
@@ -883,12 +1193,14 @@
             state.mode = mode || "lesson";
             state.lessonIndex = 0; state.cardIndex = 0; state.cardFlipped = false;
             state.quizIndex = 0; state.quizSelected = null; state.quizScore = 0; state.quizDone = false; state.showHint = false;
+            if (state.mode === "quiz") state.quizSet = buildQuizSet(id);
             go("topic");
         }
         function setMode(mode) {
             state.mode = mode;
             state.lessonIndex = 0; state.cardIndex = 0; state.cardFlipped = false;
             state.quizIndex = 0; state.quizSelected = null; state.quizScore = 0; state.quizDone = false; state.showHint = false;
+            if (mode === "quiz") state.quizSet = buildQuizSet(state.topic);
             render();
         }
 
@@ -950,6 +1262,15 @@
         }
 
         /* ---------- LESSON ---------- */
+        function bold(text) {
+            return text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        }
+        function fmtPoint(p) {
+            const lines = p.split("\n");
+            const head = bold(lines[0]);
+            const rest = lines.slice(1).map(l => `<span class="sub-point">${bold(l)}</span>`).join("");
+            return head + rest;
+        }
         function renderLesson(t) {
             const slides = LESSONS[t.id];
             const i = state.lessonIndex;
@@ -965,7 +1286,7 @@
       <div style="position:absolute; left:0; top:0; bottom:0; width:5px; background:${t.accent}"></div>
       <div class="slide-kicker" style="color:${t.accent}">${t.short.toUpperCase()}</div>
       <h3 class="slide-title">${s.title}</h3>
-      <ul class="slide-points">${s.points.map(p => `<li>${p}</li>`).join("")}</ul>
+      <ul class="slide-points">${s.points.map(p => `<li>${fmtPoint(p)}</li>`).join("")}</ul>
     </div>
     <div class="lesson-nav">
       <button class="nav-btn" ${i === 0 ? 'disabled' : ''} onclick="lessonJump(${i - 1})">&larr; Back</button>
@@ -1024,7 +1345,7 @@
 
         /* ---------- QUIZ ---------- */
         function renderQuiz(t) {
-            const qs = QUIZ[t.id];
+            const qs = state.quizSet;
             if (state.quizDone) {
                 const pct = Math.round((state.quizScore / qs.length) * 100);
                 let msg = "Worth another pass — check the Lesson slides first.";
@@ -1074,7 +1395,7 @@
   `;
         }
         function chooseOption(oi) {
-            const q = QUIZ[state.topic][state.quizIndex];
+            const q = state.quizSet[state.quizIndex];
             state.quizSelected = oi;
             state.showHint = false;
             if (oi === q.correct) state.quizScore++;
@@ -1082,7 +1403,7 @@
         }
         function toggleHint() { state.showHint = !state.showHint; render(); }
         function nextQuestion() {
-            const qs = QUIZ[state.topic];
+            const qs = state.quizSet;
             if (state.quizIndex + 1 >= qs.length) { state.quizDone = true; }
             else { state.quizIndex++; state.quizSelected = null; state.showHint = false; }
             render();
